@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://soumikiith.github.io/al-folio/sitemap.xml
+Sitemap: https://soumikiith.github.io/sitemap.xml
