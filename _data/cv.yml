@@ -2,9 +2,9 @@
   type: map
   contents:
     - name: Full Name
-      value: Albert Einstein
+      value: Soumik Kumar Basu
     - name: Date of Birth
-      value: 14th March 1879
+      value: 07th August 1999
     - name: Languages
       value: English, German
 
@@ -12,7 +12,7 @@
   type: time_table
   contents:
     - title: PhD
-      institution: University of Zurich, Zurich, Switzerland
+      institution: Indian Institute of Technology, Hyderabad
       year: 1905
       description:
         - Description 1.
