@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://soumikiith.github.io/sitemap.xml
+Sitemap: https://soumikiith.github.io/basu/sitemap.xml
