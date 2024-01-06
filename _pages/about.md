@@ -19,7 +19,7 @@ selected_papers: false # includes a list of papers marked as "selected={true}"
 social: false  # includes social icons at the bottom of the page
 ---
 
-Hi! I am a Computer Science PhD student in IIT Hyderabad. Tell the world about yourself. I work in programming languages, High Performance Computing, and systems. My research helps programmers build more efficient programs using automated programming tools.
+Hi! I am a Computer Science PhD student in IIT Hyderabad. I work in programming languages, High Performance Computing, and systems. My research helps programmers build more efficient programs using automated programming tools.
 
 I am currently pursuing my PhD degree from the IIT Hyderabad, where I am advised by [Dr. Jyothi Vedurada](https://jyothivedurada.github.io/). I also have a bachelors from the West Bengal University of Technology (WBUT) in Computer Science and Engineering.
 
