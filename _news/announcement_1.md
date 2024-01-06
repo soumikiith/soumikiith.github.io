@@ -1,8 +1,8 @@
 ---
 layout: post
-date: 2015-10-22 15:59:00-0400
+date: 15 Sep' 23
 inline: true
 related_posts: false
 ---
 
-A simple inline announcement.
+I was invited for a talk on Domain Specific Languages (DSL) at Compilers-II (CS3423) course in IIT Hyderabad.

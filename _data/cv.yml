@@ -6,14 +6,14 @@
     - name: Date of Birth
       value: 07th August 1999
     - name: Languages
-      value: English, German
+      value: English, Bengali
 
 - title: Education
   type: time_table
   contents:
     - title: PhD
       institution: Indian Institute of Technology, Hyderabad
-      year: 1905
+      year: 2021
       description:
         - Description 1.
         - Description 2.
@@ -31,8 +31,8 @@
 - title: Experience
   type: time_table
   contents:
-    - title: Professor of Theoretical Physics
-      institution: Institute for Advanced Study, Princeton University
+    - title: Teaching Assistant
+      institution: Indian Institute of Technology
       year: 1933 - 1955
       description:
         - Description 1.

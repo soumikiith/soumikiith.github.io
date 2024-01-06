@@ -6,7 +6,7 @@
     "email": "cs21resch11004[at]iith[dot]ac[dot]in",
     "phone": "+91 9163-784-761",
     "url": "https://soumikiith.github.io/basu",
-    "summary": "A German-born theoretical physicist, widely ranked among the greatest and most influential scientists of all time",
+    "summary": "I am PhD Student working in the area of Static Analysis and Compiler Optimizations. I am also interested in Quantum Computing and Mathematical Logics.",
     "location": {
       "address": "2712 Broadway St",
       "postalCode": "CA 94115",
@@ -24,40 +24,175 @@
   },
   "work": [
     {
-      "name": "Institute for Advanced Study, Princeton University",
-      "position": "Professor of Theoretical Physics",
-      "url": "https://example.com",
-      "startDate": "1933-01-01",
-      "endDate": "1955-01-01",
-      "summary": "Teaching at Palmer Physical Laboratory (now 302 Frist Campus Center). While not a professor at Princeton, I associated with the physics professors and continued to give lectures on campus.",
+      "name": "Indian Institute of Technology, Hyderabad",
+      "position": "Teaching Assistant",
+      "startDate": "OCT' 21",
+      "endDate": "DEC' 21",
+      "summary": "Course Name: Computer Architecture (CS2323)",
       "highlights": [
-        "Relativity"
+        "Instructor: Dr. Praveen Tammana"
+      ]
+    },
+
+    {
+      "name": "Indian Institute of Technology, Hyderabad",
+      "position": "Teaching Assistant",
+      "startDate": "JAN' 22",
+      "endDate": "JUN' 22",
+      "summary": "Course Name: Operating Systems (CS3523)",
+      "highlights": [
+        "Instructor: Dr. Sathya Peri"
+      ]
+    },
+
+    {
+      "name": "Indian Institute of Technology, Hyderabad",
+      "position": "Teaching Assistant",
+      "startDate": "JAN' 23",
+      "endDate": "JUN' 23",
+      "summary": "Course Name: Software Engineering (CS4443)",
+      "highlights": [
+        "Instructor: Dr. M V Panduranga Rao and Dr. Jyothi Vedurada"
+      ]
+    },
+
+    {
+      "name": "Indian Institute of Technology, Hyderabad",
+      "position": "Teaching Assistant",
+      "startDate": "AUG' 23",
+      "endDate": "DEC' 23",
+      "summary": "Course Name: Compilers-II (CS3423)",
+      "highlights": [
+        "Instructor: Dr. Jyothi Vedurada"
+      ]
+    },
+
+    {
+      "name": "Indian Institute of Technology, Hyderabad",
+      "position": "Teaching Assistant",
+      "startDate": "JAN' 24",
+      "endDate": "JUN' 24",
+      "summary": "Course Name: Introduction to Program Analysis and Optimization (CS5863)",
+      "highlights": [
+        "Instructor: Dr. Jyothi Vedurada"
       ]
     }
   ],
-  "volunteer": [],
+  
   "education": [
     {
-      "institution": "University of Zurich, Zurich, Switzerland",
-      "url": "https://www.uzh.ch/",
-      "area": "Software Development",
+      "institution": "Indian Institute of Technology, Hyderabad, India",
+      "url": "https://www.iith.ac.in/",
+      "area": "Compiler Analysis and High Performance Computing",
       "studyType": "PhD",
-      "startDate": "1905-01-01",
-      "endDate": "1905-01-01",
-      "score": "",
+      "startDate": "AUG' 21",
+      "endDate": "' 26",
+      "score": "9/10",
       "courses": [
-        "Theory of Relativity"
+        "Department - Computer Science and Engineering",
+        "CGPA - 9/10"
+      ]
+    },
+
+    {
+      "institution": "MCKV Institute of Engineering, Howrah, India",
+      "url": "https://www.mckvie.edu.in/",
+      "area": "Computer Science and Engineering",
+      "studyType": "Bachelor in Technology",
+      "startDate": "AUG' 17",
+      "endDate": "'AUG' 21",
+      "score": "9.2/10",
+      "courses": [
+        "CGPA - 9.2/10"
+      ]
+    },
+
+    {
+      "institution": "Sinthi Ramkrishna Sangha Vidyamandir, Kolkata, India",
+      "url": "https://school.banglarshiksha.gov.in/ws/website/index/19170100220",
+      "area": "",
+      "studyType": "Higher Secondary",
+      "startDate": "JAN' 15",
+      "endDate": "MAR' 17",
+      "score": "85.8",
+      "courses": [
+        "Percentage - 85.8%"
+      ]
+    },
+
+    {
+      "institution": "Sinthi Ramkrishna Sangha Vidyamandir, Kolkata, India",
+      "url": "https://school.banglarshiksha.gov.in/ws/website/index/19170100220",
+      "area": "",
+      "studyType": "Secondary",
+      "startDate": "JAN' 14",
+      "endDate": "MAR' 15",
+      "score": "91.9",
+      "courses": [
+        "Percentage - 91.9%"
       ]
     }
+
   ],
   "awards": [
     {
-      "title": "Nobel Prize in Physics",
-      "date": "1921-11-01",
-      "awarder": "Royal Swedish Academy of Sciences",
-      "summary": "The Nobel Prizes are five separate prizes that, according to Alfred Nobel's will of 1895, are awarded to 'those who, during the preceding year, have conferred the greatest benefit to humankind.'"
+      "title": "Winner of Mathmania ’18",
+      "date": "MAR' 18",
+      "awarder": "",
+      "summary": "Inter-college Mathematics Competition among 180 teams"
+    },
+
+    {
+      "title": "Mathematics Medal",
+      "date": "MAR' 17",
+      "awarder": "",
+      "summary": "Intra-school Medal for highest marks in Mathematics in Higher Secondary Exam"
+    },
+
+    {
+      "title": "Certificate of Merit-2015",
+      "date": "JUN' 18",
+      "awarder": "",
+      "summary": "Excellant Performance in Science Subjects in Secondary Exam"
+    },
+
+    {
+      "title": "Certificate of Merit-2017",
+      "date": "JUN' 18",
+      "awarder": "",
+      "summary": "Excellant Performance in Higher Secondary Exam"
     }
   ],
+
+
+  "volunteer": [
+    {
+      "startDate": "NOV' 22",
+      "endDate": "NOV' 22",
+      "position": "Artifact Evaluation Committee Member",
+      "url": "https://ppopp23.sigplan.org/profile/soumikkumarbasu",
+      "organization": "PPoPP' 2023"
+    },
+
+    {
+      "startDate": "AUG' 22",
+      "endDate": "AUG' 23",
+      "position": "System's Moderator",
+      "url": "",
+      "organization": "ACM Student Chapter, IIT Hyderabad"
+    },
+
+
+    {
+      "startDate": "AUG' 19",
+      "endDate": "AUG' 19",
+      "position": "Organizing Committee Member",
+      "url": "",
+      "organization": "CSI Regional Student Convention' 19"
+    }
+
+  ],
+  
   "certificates": [],
   "publications": [],
   "skills": [],
@@ -71,7 +206,8 @@
       "fluency": "Fluent"
     }
   ],
-  "interests": [],
+  "interests": [
+  ],
   "references": [],
   "projects": []
 }
