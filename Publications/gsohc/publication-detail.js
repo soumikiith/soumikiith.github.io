@@ -121,11 +121,13 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Audio button or player not found!");
     }
     
-    // Author Interview Button
-    const interviewBtn = document.querySelector('.audio-btn-interview');
-    if (interviewBtn) {
-        interviewBtn.addEventListener('click', function() {
-            alert("Author interview coming soon!");
+    // Artifact link functionality
+    const artifactLink = document.querySelector('.artifact-link');
+    if (artifactLink) {
+        artifactLink.addEventListener('click', function(e) {
+            if (!confirm('You are about to access the research artifact repository. Continue?')) {
+                e.preventDefault();
+            }
         });
     }
 

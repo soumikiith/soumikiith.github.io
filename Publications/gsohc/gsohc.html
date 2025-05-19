@@ -30,7 +30,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
-        .audio-btn, .audio-btn-interview {
+        .audio-btn, .artifact-link, .download-btn {
             margin-bottom: 10px;
             display: inline-block;
         }
@@ -72,6 +72,53 @@
             background-color: #f0f0f0;
             border: 1px solid #ccc;
             display: none;
+        }
+        
+        /* New styles for side by side layout */
+        .multimedia-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .multimedia-item {
+            flex: 1;
+            min-width: 280px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .multimedia-item {
+                min-width: 100%;
+            }
+        }
+        
+        /* Badge styles */
+        .resource-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            margin-right: 8px;
+            margin-bottom: 5px;
+        }
+        
+        .badge-evaluated {
+            background-color: #4c1;
+        }
+        
+        .badge-available {
+            background-color: #17a;
+        }
+        
+        .badge-award {
+            background-color: #e94;
         }
     </style>
 </head>
@@ -126,40 +173,45 @@
                     </p>
                 </div>
 
-                <div class="publication-section media-section">
-                    <h2>Multimedia Resources</h2>
-                    <div class="media-grid">
-                        <div class="media-item">
-                            <h3>Research Presentation</h3>
-                            <div class="video-container">
-                                <iframe 
-                                    width="560" 
-                                    height="315" 
-                                    src="/api/placeholder/560/315" 
-                                    title="Research Presentation" 
-                                    frameborder="0" 
-                                    allowfullscreen>
-                                </iframe>
+                <!-- Research Resources Section (3 columns) -->
+                <div class="publication-section">
+                    <h2>Research Resources</h2>
+                    <div class="multimedia-container">
+                        <!-- Research Paper Section -->
+                        <div class="multimedia-item">
+                            <h3>Research Paper</h3>
+                            <a href="#" class="btn download-btn">
+                                <i class="fas fa-file-pdf"></i> Download PDF
+                            </a>
+                            <p>Full research paper available for download and citation.</p>
+                            <!-- <div style="margin-top: 15px">
+                                <span class="resource-badge badge-award">
+                                    <i class="fas fa-award"></i> Best Paper Award
+                                </span>
+                            </div> -->
+                        </div>
+                        
+                        <!-- Artifact Section -->
+                        <div class="multimedia-item">
+                            <h3>Research Artifact</h3>
+                            <a href="https://doi.org/10.5281/zenodo.example" class="btn artifact-link">
+                                <i class="fas fa-cube"></i> Access Artifact
+                            </a>
+                            <p>Explore the implementation code, benchmark datasets, and evaluation scripts used in our research.</p>
+                            
+                            <div class="artifact-badges" style="margin-top: 15px">
+                                <!-- <span class="resource-badge badge-evaluated">
+                                    <i class="fas fa-check-circle"></i> Artifact Evaluated
+                                </span> -->
+                                <span class="resource-badge badge-available">
+                                    <i class="fas fa-star"></i> Available
+                                </span>
                             </div>
                         </div>
                         
-                        <div class="media-item">
-                            <h3>Research Paper</h3>
-                            <div class="document-preview">
-                                <a href="#" class="btn download-btn">
-                                    <i class="fas fa-file-pdf"></i> Download PDF
-                                </a>
-                                <p>Full research paper available for download and citation.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="publication-section audio-section">
-                    <h2>Additional Resources</h2>
-                    <div class="audio-resources">
-                        <div class="audio-item">
-                            <h3>Paper Audio Summary</h3>
+                        <!-- Audio Section -->
+                        <div class="multimedia-item">
+                            <h3>Audio Summary</h3>
                             <button type="button" class="btn audio-btn">
                                 <i class="fas fa-play"></i> Play Summary
                             </button>
@@ -169,7 +221,7 @@
                                     <div class="audio-progress-bar" id="audioProgressBar"></div>
                                 </div>
                                 <div class="audio-time">
-                                    <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                                    <span id="currentTime">0:00</span>  <span id="duration">0:00</span>
                                 </div>
                             </div>
                             <audio id="summary-audio" class="audio-player" preload="auto">
@@ -179,14 +231,23 @@
                                 Your browser does not support the audio element.
                             </audio>
                         </div>
-                        <div class="audio-item">
-                            <h3>Author Interview</h3>
-                            <button type="button" class="btn audio-btn-interview">
-                                <i class="fas fa-microphone"></i> Researcher Insights
-                            </button>
-                            <p>In-depth discussion about the research methodology and implications.</p>
-                        </div>
                     </div>
+                </div>
+
+                <!-- Online Presentation Section -->
+                <div class="publication-section">
+                    <h2>Conference Presentation</h2>
+                    <div class="video-container">
+                        <iframe 
+                            width="100%" 
+                            height="450" 
+                            src="/api/placeholder/800/450" 
+                            title="Research Presentation" 
+                            frameborder="0" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <p style="margin-top: 15px; font-style: italic;">Watch the full presentation from ECOOP 2025 conference.</p>
                 </div>
 
                 <div class="publication-section citation-section">
