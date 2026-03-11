@@ -1,0 +1,27 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "Documents"
+
+collections:
+  - name: "news"
+    label: "Latest News"
+    folder: "_news"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Date", name: "date", widget: "string"}
+      - {label: "News Item", name: "body", widget: "text"}
+
+  - name: "publications"
+    label: "Publications"
+    folder: "_publications"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Authors", name: "authors", widget: "string"}
+      - {label: "Venue", name: "venue", widget: "string"}
+      - {label: "Year", name: "year", widget: "string"}
+      - {label: "URL", name: "url", widget: "string"}
