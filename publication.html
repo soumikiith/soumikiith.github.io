@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publication</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="config.js" defer></script>
+  <script src="common.js" defer></script>
+  <script defer>
+  document.addEventListener("DOMContentLoaded", () => {
+    initPage("publications.html");
+
+    const id  = getParam("id");
+    const pub = id ? getPub(id) : null;
+
+    if (!pub) {
+      document.title = "Not Found";
+      document.getElementById("pub-content").innerHTML = `
+        <p class="empty-state">Publication not found. <a href="publications.html">← Back to publications</a></p>`;
+      return;
+    }
+
+    document.title = `${pub.title} · ${CONFIG.personal.name}`;
+
+    /* ── Abstract paragraphs ── */
+    const abstractHTML = pub.abstract
+      ? pub.abstract.split(/\n\n+/).map(p => `<p>${p.trim()}</p>`).join("")
+      : "";
+
+    /* ── Resources ── */
+    const res = pub.resources || {};
+    const resourceCards = [];
+
+    if (res.pdf) {
+      resourceCards.push(`
+        <div class="resource-card">
+          <a href="${res.pdf}" target="_blank" rel="noopener">
+            <div class="resource-card-label">Paper</div>
+            <div class="resource-card-title">Download PDF</div>
+            <div class="resource-card-sub">Full research paper</div>
+          </a>
+        </div>`);
+    }
+
+    if (res.artifact) {
+      const avail = res.artifact.available
+        ? `<div class="resource-card-sub" style="color:#2d7a4f">✓ ${res.artifact.badge}</div>`
+        : `<div class="resource-card-sub">Badge: ${res.artifact.badge}</div>`;
+      resourceCards.push(`
+        <div class="resource-card">
+          <a href="${res.artifact.url}" target="_blank" rel="noopener">
+            <div class="resource-card-label">Artifact</div>
+            <div class="resource-card-title">Access Artifact</div>
+            ${avail}
+          </a>
+        </div>`);
+    }
+
+    if (res.slides) {
+      resourceCards.push(`
+        <div class="resource-card">
+          <a href="${res.slides}" target="_blank" rel="noopener">
+            <div class="resource-card-label">Slides</div>
+            <div class="resource-card-title">View Slides (PDF)</div>
+            <div class="resource-card-sub">${res.slides.split('/').pop()}</div>
+          </a>
+        </div>`);
+    }
+
+    if (res.code) {
+      resourceCards.push(`
+        <div class="resource-card">
+          <a href="${res.code}" target="_blank" rel="noopener">
+            <div class="resource-card-label">Code</div>
+            <div class="resource-card-title">GitHub Repository</div>
+          </a>
+        </div>`);
+    }
+
+    /* ── Audio ── */
+    const audioHTML = res.audio ? `
+      <div class="section">
+        <p class="section-label">Audio Summary</p>
+        <div class="audio-player">
+          <audio controls preload="none" style="width:100%">
+            <source src="${res.audio}" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      </div>` : "";
+
+    /* ── Video — PDF or MP4 path in repo ── */
+    let videoHTML = "";
+    if (res.video) {
+      const isMP4 = /\.(mp4|webm|mov)$/i.test(res.video);
+      const isPDF = /\.pdf$/i.test(res.video);
+      if (isPDF) {
+        videoHTML = `
+      <div class="section">
+        <p class="section-label">Conference Presentation</p>
+        <div class="pdf-embed-wrap">
+          <iframe src="${res.video}" title="Conference presentation"></iframe>
+        </div>
+      </div>`;
+      } else if (isMP4) {
+        videoHTML = `
+      <div class="section">
+        <p class="section-label">Conference Presentation</p>
+        <video controls style="width:100%;border:1px solid var(--border);border-radius:3px">
+          <source src="${res.video}" />
+        </video>
+      </div>`;
+      } else {
+        // fallback: YouTube ID
+        videoHTML = `
+      <div class="section">
+        <p class="section-label">Conference Presentation</p>
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/${res.video}"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen title="Conference presentation"></iframe>
+        </div>
+      </div>`;
+      }
+    }
+
+    /* ── Citation ── */
+    const citationHTML = pub.citation ? `
+      <div class="section">
+        <p class="section-label">Citation</p>
+        <div class="citation-box" id="citation-text">${pub.citation}</div>
+        <button class="copy-btn" id="copy-btn" onclick="copyCitation()">Copy citation</button>
+      </div>` : "";
+
+    /* ── Render ── */
+    document.getElementById("pub-content").innerHTML = `
+      <div class="pub-detail-wrap">
+        <a href="publications.html" class="back-link">All publications</a>
+
+        <h1 class="pub-detail-title">${pub.title}</h1>
+
+        <div class="pub-detail-byline">
+          <div class="pub-detail-authors">${formatAuthors(pub.authors)}</div>
+          <div class="pub-detail-venue">${pub.venue}${pub.dates ? `, ${pub.dates}` : ""}</div>
+          <div class="pub-detail-meta">
+            ${typeBadge(pub)}
+            ${pub.coreRank ? `<span class="tag">CORE&nbsp;${pub.coreRank}</span>` : ""}
+          </div>
+        </div>
+
+        ${abstractHTML ? `
+        <div class="pub-abstract-section section">
+          <p class="section-label">Abstract</p>
+          ${abstractHTML}
+        </div>` : ""}
+
+        ${resourceCards.length ? `
+        <div class="section">
+          <p class="section-label">Resources</p>
+          <div class="resources-grid">${resourceCards.join("")}</div>
+        </div>` : ""}
+
+        ${audioHTML}
+        ${videoHTML}
+        ${citationHTML}
+      </div>
+    `;
+  });
+
+  function copyCitation() {
+    const text  = document.getElementById("citation-text")?.innerText || "";
+    const btn   = document.getElementById("copy-btn");
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = "Copied!";
+      btn.classList.add("copied");
+      setTimeout(() => {
+        btn.textContent = "Copy citation";
+        btn.classList.remove("copied");
+      }, 2000);
+    });
+  }
+  </script>
+</head>
+<body>
+
+<header style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-nav"></div>
+</header>
+
+<main class="page-wrap">
+  <div id="pub-content"></div>
+</main>
+
+<footer style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-footer"></div>
+</footer>
+
+</body>
+</html>

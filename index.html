@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loading…</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="config.js" defer></script>
+  <script src="common.js" defer></script>
+  <script defer>
+  document.addEventListener("DOMContentLoaded", () => {
+    /* ── Page init ── */
+    initPage("index.html");
+    document.title = CONFIG.personal.name;
+
+    /* ── Hero ── */
+    const hero = document.getElementById("hero");
+    hero.innerHTML = `
+      <div class="hero-text">
+        <h1>${CONFIG.personal.name}</h1>
+        <p class="name-local">${CONFIG.personal.nameLocal}</p>
+        <p class="hero-meta">${CONFIG.personal.title} · ${CONFIG.personal.department}, ${CONFIG.personal.institution}</p>
+        <div class="hero-bio">
+          ${CONFIG.about.bio.map(p => `<p>${p}</p>`).join("")}
+        </div>
+        <div class="interests">
+          ${CONFIG.about.interests.map(i => `<span class="tag">${i}</span>`).join("")}
+        </div>
+      </div>
+      <img src="${CONFIG.personal.photo}" alt="${CONFIG.personal.photoAlt}" class="hero-photo" />
+    `;
+
+    /* ── News ── */
+    const newsList = document.getElementById("news-list");
+    if (CONFIG.news.length === 0) {
+      newsList.innerHTML = `<p class="empty-state">No recent news.</p>`;
+    } else {
+      newsList.innerHTML = `<ul class="news-list">
+        ${CONFIG.news.map(n => `
+          <li class="news-item">
+            <span class="news-date">${n.date}</span>
+            <span class="news-text">
+              ${n.text}
+              ${n.link ? `<a href="${n.link}">${n.linkText || "Read more →"}</a>` : ""}
+            </span>
+          </li>
+        `).join("")}
+      </ul>`;
+    }
+
+    /* ── Featured publications ── */
+    const featured = CONFIG.publications.filter(p => p.featured);
+    const pubList  = document.getElementById("featured-pubs");
+    pubList.innerHTML = `<ul class="pub-card-list">
+      ${featured.map(pub => {
+        const href = pub.detail ? `publication.html?id=${pub.id}` : null;
+        return `
+        <li class="pub-card">
+          <div class="pub-card-title">
+            ${href ? `<a href="${href}">${pub.title}</a>` : pub.title}
+          </div>
+          <div class="pub-card-authors">${formatAuthors(pub.authors)}</div>
+          <div class="pub-card-venue">
+            <span>${pub.venueShort}, ${pub.year}</span>
+            ${typeBadge(pub)}
+          </div>
+          <div class="pub-card-links">
+            ${href           ? `<a href="${href}" class="pub-link">Details</a>` : ""}
+            ${pub.resources?.pdf ? `<a href="${pub.resources.pdf}" class="pub-link" target="_blank">PDF</a>` : ""}
+            ${pub.resources?.artifact?.url ? `<a href="${pub.resources.artifact.url}" class="pub-link" target="_blank">Artifact</a>` : ""}
+          </div>
+        </li>`;
+      }).join("")}
+    </ul>`;
+
+    /* ── Hobbies ── */
+    const hobbies = document.getElementById("hobbies");
+    hobbies.innerHTML = `<ul class="hobby-list">
+      ${CONFIG.about.hobbies.map(h => `<li>${h}</li>`).join("")}
+    </ul>`;
+  });
+  </script>
+</head>
+<body>
+
+<header style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-nav"></div>
+</header>
+
+<main class="page-wrap">
+
+  <!-- Hero -->
+  <section id="hero" class="hero"></section>
+
+  <!-- News -->
+  <section class="section">
+    <p class="section-label">Latest News</p>
+    <div id="news-list"></div>
+  </section>
+
+  <!-- Featured publications -->
+  <section class="section">
+    <p class="section-label">Recent Publications</p>
+    <div id="featured-pubs"></div>
+    <p style="margin-top:1.1rem">
+      <a href="publications.html" style="font-family:var(--ff-sans);font-size:.82rem;color:var(--muted);border-bottom:1px solid var(--faint);padding-bottom:1px;text-decoration:none">
+        View all publications →
+      </a>
+    </p>
+  </section>
+
+  <!-- Personal / hobbies -->
+  <section class="section">
+    <p class="section-label">Outside Research</p>
+    <div id="hobbies"></div>
+  </section>
+
+</main>
+
+<footer style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-footer"></div>
+</footer>
+
+</body>
+</html>

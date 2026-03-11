@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — Portfolio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#faf9f7; --bg-alt:#f3f2ef; --border:#e2e1dc;
+      --text:#1c1c1a; --muted:#6b6b68; --faint:#c4c3be;
+      --accent:#2a52a0; --red:#c0392b; --green:#2d7a4f;
+      --sidebar-w:220px;
+      --ff:"DM Sans",system-ui,sans-serif;
+      --mono:"DM Mono",monospace;
+    }
+    html,body { height:100%; font-family:var(--ff); background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; }
+    .shell { display:flex; min-height:100vh; }
+
+    /* Sidebar */
+    .sidebar { width:var(--sidebar-w); background:#fff; border-right:1px solid var(--border); display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; padding:1.5rem 0; z-index:10; }
+    .sidebar-logo { font-size:.7rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); padding:0 1.25rem 1.5rem; border-bottom:1px solid var(--border); margin-bottom:1rem; }
+    .sidebar-nav { flex:1; overflow-y:auto; }
+    .nav-section-label { font-size:.65rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); padding:.75rem 1.25rem .3rem; }
+    .nav-item { display:block; font-size:.84rem; color:var(--muted); padding:.45rem 1.25rem; cursor:pointer; border-left:2px solid transparent; transition:color .12s,border-color .12s,background .12s; text-decoration:none; }
+    .nav-item:hover { color:var(--text); background:var(--bg-alt); }
+    .nav-item.active { color:var(--text); border-left-color:var(--text); background:var(--bg-alt); font-weight:500; }
+    .sidebar-bottom { padding:1rem 1.25rem; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:.5rem; }
+
+    /* Main */
+    .main { margin-left:var(--sidebar-w); flex:1; display:flex; flex-direction:column; min-height:100vh; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; padding:.9rem 2rem; border-bottom:1px solid var(--border); background:#fff; position:sticky; top:0; z-index:5; gap:1rem; }
+    .topbar-title { font-size:.95rem; font-weight:500; }
+    .topbar-actions { display:flex; gap:.6rem; align-items:center; }
+    .content { padding:2rem; max-width:820px; padding-bottom:5rem; }
+
+    /* Tabs */
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+
+    /* Typography */
+    .section-title { font-size:1rem; font-weight:500; margin-bottom:1.5rem; padding-bottom:.75rem; border-bottom:1px solid var(--border); }
+    .section-subtitle { font-size:.8rem; font-weight:500; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin:1.5rem 0 .75rem; }
+
+    /* Buttons */
+    .btn { font-family:var(--ff); font-size:.78rem; font-weight:500; letter-spacing:.03em; border-radius:3px; padding:.45rem .9rem; cursor:pointer; border:1px solid var(--border); background:var(--bg); color:var(--muted); transition:all .15s; white-space:nowrap; }
+    .btn:hover { border-color:var(--text); color:var(--text); }
+    .btn-primary { background:var(--text); color:#fff; border-color:var(--text); }
+    .btn-primary:hover { opacity:.8; }
+    .btn-primary:disabled { opacity:.4; cursor:default; }
+    .btn-danger { color:var(--red); border-color:#e8c0bb; }
+    .btn-danger:hover { background:#fdf0ef; border-color:var(--red); }
+    .btn-sm { padding:.25rem .6rem; font-size:.72rem; }
+
+    /* Forms */
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:.85rem 1.2rem; }
+    .form-grid .full { grid-column:1/-1; }
+    .field { display:flex; flex-direction:column; gap:.35rem; }
+    .field label { font-size:.72rem; font-weight:500; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); }
+    .field input,.field textarea,.field select { font-family:var(--ff); font-size:.87rem; padding:.55rem .75rem; border:1px solid var(--border); border-radius:3px; background:#fff; color:var(--text); outline:none; transition:border-color .15s; width:100%; }
+    .field input:focus,.field textarea:focus,.field select:focus { border-color:var(--text); }
+    .field textarea { resize:vertical; min-height:90px; line-height:1.55; }
+    .field .hint { font-size:.73rem; color:var(--muted); margin-top:.15rem; }
+
+    /* Cards */
+    .card-list { display:flex; flex-direction:column; gap:.6rem; margin-bottom:1rem; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:3px; overflow:hidden; }
+    .card-header { display:flex; align-items:center; gap:.75rem; padding:.75rem 1rem; cursor:pointer; user-select:none; }
+    .card-header:hover { background:var(--bg-alt); }
+    .card-title { flex:1; font-size:.87rem; font-weight:500; line-height:1.35; }
+    .card-meta  { font-size:.75rem; color:var(--muted); }
+    .card-chevron { font-size:.7rem; color:var(--faint); transition:transform .2s; flex-shrink:0; }
+    .card.open .card-chevron { transform:rotate(180deg); }
+    .card-body { display:none; padding:1rem 1rem 1.25rem; border-top:1px solid var(--border); background:var(--bg-alt); }
+    .card.open .card-body { display:block; }
+
+    /* GitHub status */
+    .gh-status { display:flex; align-items:center; gap:.5rem; font-size:.82rem; padding:.65rem .9rem; border-radius:3px; border:1px solid var(--border); margin-bottom:1.25rem; }
+    .gh-status.ok  { background:#f0faf5; border-color:#a8d5bc; color:var(--green); }
+    .gh-status.err { background:#fdf0ef; border-color:#e8c0bb; color:var(--red); }
+    .gh-status.idle { background:var(--bg-alt); color:var(--muted); }
+    .dot { width:7px; height:7px; border-radius:50%; background:currentColor; flex-shrink:0; }
+
+    /* Publish bar */
+    .publish-bar { position:fixed; bottom:0; left:var(--sidebar-w); right:0; background:#fff; border-top:1px solid var(--border); padding:.9rem 2rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; z-index:9; }
+    .publish-bar-msg { font-size:.82rem; color:var(--muted); }
+    .publish-bar-msg.success { color:var(--green); }
+    .publish-bar-msg.error   { color:var(--red); }
+
+    /* Tags */
+    .tag-input-wrap { display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; }
+    .tag-item { display:inline-flex; align-items:center; gap:.3rem; font-size:.78rem; background:var(--bg-alt); border:1px solid var(--border); border-radius:2px; padding:.2em .55em; }
+    .tag-item button { background:none; border:none; cursor:pointer; color:var(--muted); font-size:.85rem; line-height:1; padding:0; }
+    .tag-item button:hover { color:var(--red); }
+    .tag-add-input { font-family:var(--ff); font-size:.82rem; border:1px dashed var(--faint); border-radius:2px; padding:.2em .55em; outline:none; width:130px; background:transparent; }
+    .tag-add-input:focus { border-color:var(--text); }
+
+    /* Toggle */
+    .toggle-row { display:flex; align-items:center; gap:.65rem; font-size:.85rem; }
+    .toggle { position:relative; width:36px; height:20px; flex-shrink:0; }
+    .toggle input { opacity:0; width:0; height:0; }
+    .toggle-slider { position:absolute; inset:0; background:var(--border); border-radius:20px; cursor:pointer; transition:background .15s; }
+    .toggle-slider::before { content:""; position:absolute; width:14px; height:14px; left:3px; top:3px; border-radius:50%; background:#fff; transition:transform .15s; }
+    .toggle input:checked + .toggle-slider { background:var(--text); }
+    .toggle input:checked + .toggle-slider::before { transform:translateX(16px); }
+
+    /* Add / divider */
+    .add-btn { font-family:var(--ff); font-size:.78rem; color:var(--accent); background:none; border:1px dashed #a8b8d8; border-radius:3px; padding:.5rem 1rem; cursor:pointer; width:100%; transition:background .15s; }
+    .add-btn:hover { background:#eef1f9; }
+    .divider { border:none; border-top:1px solid var(--border); margin:1.25rem 0; }
+
+    /* Award badge inside pub cards */
+    .award-row { display:flex; gap:.5rem; align-items:center; margin-bottom:.4rem; flex-wrap:wrap; }
+    .award-row input { flex:1; min-width:120px; }
+
+    /* Password change */
+    .pw-box { max-width:380px; }
+    .pw-strength { height:3px; border-radius:2px; background:var(--border); margin-top:.4rem; overflow:hidden; }
+    .pw-strength-fill { height:100%; width:0; border-radius:2px; transition:width .2s,background .2s; }
+    .pw-msg { font-size:.8rem; margin-top:.6rem; display:none; }
+    .pw-msg.show { display:block; }
+    .pw-msg.err { color:var(--red); }
+    .pw-msg.ok  { color:var(--green); }
+
+    /* Inline edit inputs in card headers */
+    .inline-input { font-family:var(--ff); font-size:.85rem; border:none; background:transparent; outline:none; color:var(--text); flex:1; min-width:80px; }
+
+    @media (max-width:768px) {
+      .sidebar { display:none; }
+      .main { margin-left:0; }
+      .publish-bar { left:0; }
+      .form-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">Portfolio Admin</div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Content</div>
+    <a class="nav-item active" onclick="switchTab('profile')">Profile</a>
+    <a class="nav-item" onclick="switchTab('about')">About &amp; Bio</a>
+    <a class="nav-item" onclick="switchTab('news')">News</a>
+    <a class="nav-item" onclick="switchTab('publications')">Publications</a>
+    <a class="nav-item" onclick="switchTab('teaching')">Teaching</a>
+    <a class="nav-item" onclick="switchTab('services')">Services</a>
+    <a class="nav-item" onclick="switchTab('cv')">CV</a>
+    <div class="nav-section-label">Site</div>
+    <a class="nav-item" onclick="switchTab('nav')">Navigation</a>
+    <a class="nav-item" onclick="switchTab('github')">GitHub / Publish</a>
+    <div class="nav-section-label">Security</div>
+    <a class="nav-item" onclick="switchTab('password')">Change Password</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <a href="../index.html" target="_blank" class="btn" style="text-align:center;text-decoration:none">View site ↗</a>
+    <button class="btn btn-danger" onclick="logout()" style="width:100%">Sign out</button>
+  </div>
+</aside>
+
+<!-- ── Main ── -->
+<div class="main">
+  <div class="topbar">
+    <span class="topbar-title" id="topbar-title">Profile</span>
+    <div class="topbar-actions">
+      <button class="btn btn-primary" id="publish-btn" onclick="publish()">Publish to GitHub</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══ PROFILE ═══════════════════════════════════ -->
+    <div class="tab-panel active" id="tab-profile">
+      <div class="section-title">Personal Information</div>
+      <div class="form-grid">
+        <div class="field full"><label>Full Name</label><input type="text" id="p-name" /></div>
+        <div class="field"><label>Name (local script)</label><input type="text" id="p-nameLocal" /></div>
+        <div class="field"><label>Title / Role</label><input type="text" id="p-title" /></div>
+        <div class="field"><label>Institution</label><input type="text" id="p-institution" /></div>
+        <div class="field"><label>Department</label><input type="text" id="p-department" /></div>
+        <div class="field"><label>Email</label><input type="email" id="p-email" /></div>
+        <div class="field"><label>Profile Photo Path</label><input type="text" id="p-photo" /><span class="hint">Relative to site root</span></div>
+      </div>
+      <div class="section-subtitle">Social Links <span style="font-weight:300;text-transform:none;font-size:.78rem">(leave blank to hide)</span></div>
+      <div class="form-grid">
+        <div class="field"><label>GitHub</label><input type="url" id="s-github" /></div>
+        <div class="field"><label>Google Scholar</label><input type="url" id="s-scholar" /></div>
+        <div class="field"><label>LinkedIn</label><input type="url" id="s-linkedin" /></div>
+        <div class="field"><label>Twitter / X</label><input type="url" id="s-twitter" /></div>
+        <div class="field"><label>DBLP</label><input type="url" id="s-dblp" /></div>
+        <div class="field"><label>ORCID</label><input type="url" id="s-orcid" /></div>
+      </div>
+    </div>
+
+    <!-- ═══ ABOUT ══════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-about">
+      <div class="section-title">About Me</div>
+      <div class="section-subtitle">Bio Paragraphs</div>
+      <div id="bio-list" class="card-list"></div>
+      <button class="add-btn" onclick="addBio()">+ Add paragraph</button>
+      <hr class="divider" />
+      <div class="section-subtitle">Research Interests</div>
+      <div class="tag-input-wrap" id="interests-wrap"></div>
+      <hr class="divider" />
+      <div class="section-subtitle">Outside Research</div>
+      <div id="hobbies-list" class="card-list"></div>
+      <button class="add-btn" onclick="addHobby()">+ Add item</button>
+    </div>
+
+    <!-- ═══ NEWS ═══════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-news">
+      <div class="section-title">Latest News</div>
+      <div id="news-list" class="card-list"></div>
+      <button class="add-btn" onclick="addNews()">+ Add news item</button>
+    </div>
+
+    <!-- ═══ PUBLICATIONS ══════════════════════════════ -->
+    <div class="tab-panel" id="tab-publications">
+      <div class="section-title">Publications</div>
+      <div id="pub-list" class="card-list"></div>
+      <button class="add-btn" onclick="addPublication()">+ Add publication</button>
+    </div>
+
+    <!-- ═══ TEACHING ══════════════════════════════════ -->
+    <div class="tab-panel" id="tab-teaching">
+      <div class="section-title">Teaching History</div>
+      <div id="teaching-list" class="card-list"></div>
+      <button class="add-btn" onclick="addTeaching()">+ Add teaching item</button>
+    </div>
+
+    <!-- ═══ SERVICES ══════════════════════════════════ -->
+    <div class="tab-panel" id="tab-services">
+      <div class="section-title">Services</div>
+      <p style="font-size:.84rem;color:var(--muted);margin-bottom:1.25rem">
+        Reviewer roles, committee memberships, volunteer work, and other academic services.
+      </p>
+      <div id="services-list" class="card-list"></div>
+      <button class="add-btn" onclick="addService()">+ Add service</button>
+    </div>
+
+    <!-- ═══ CV ════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-cv">
+      <div class="section-title">Curriculum Vitae</div>
+
+      <div class="section-subtitle">PDF</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>PDF Path <span style="font-weight:300">(relative to site root)</span></label>
+          <input type="text" id="cv-pdfPath" placeholder="Documents/cv.pdf" />
+          <span class="hint">Leave blank to hide download button</span>
+        </div>
+        <div class="field" style="justify-content:flex-end">
+          <label>&nbsp;</label>
+          <label class="toggle-row" style="margin-top:.3rem">
+            <span class="toggle"><input type="checkbox" id="cv-embedPdf" /><span class="toggle-slider"></span></span>
+            Embed PDF on page
+          </label>
+        </div>
+      </div>
+
+      <hr class="divider" />
+      <div class="section-subtitle">Education</div>
+      <div id="cv-education-list" class="card-list"></div>
+      <button class="add-btn" onclick="addCvItem('education',{degree:'',institution:'',period:'',details:''})">+ Add education</button>
+
+      <hr class="divider" />
+      <div class="section-subtitle">Experience</div>
+      <div id="cv-experience-list" class="card-list"></div>
+      <button class="add-btn" onclick="addCvItem('experience',{role:'',org:'',period:'',details:''})">+ Add experience</button>
+
+      <hr class="divider" />
+      <div class="section-subtitle">Awards &amp; Honors
+        <span style="font-weight:300;text-transform:none;font-size:.78rem"> — paper-level awards are set inside each Publication</span>
+      </div>
+      <div id="cv-awards-list" class="card-list"></div>
+      <button class="add-btn" onclick="addCvItem('awards',{title:'',body:'',year:new Date().getFullYear()})">+ Add award</button>
+    </div>
+
+    <!-- ═══ NAV ════════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-nav">
+      <div class="section-title">Navigation Links</div>
+      <div id="nav-list" class="card-list"></div>
+      <button class="add-btn" onclick="addNav()">+ Add nav link</button>
+    </div>
+
+    <!-- ═══ GITHUB ════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-github">
+      <div class="section-title">GitHub Integration</div>
+      <div id="gh-status" class="gh-status idle"><span class="dot"></span><span id="gh-status-text">Not connected. Fill in details below and test.</span></div>
+      <div class="form-grid">
+        <div class="field full">
+          <label>GitHub Repository <span style="font-weight:300">(username/repo)</span></label>
+          <input type="text" id="gh-repo" placeholder="soumikiith/soumikiith.github.io" />
+        </div>
+        <div class="field full">
+          <label>Personal Access Token</label>
+          <input type="password" id="gh-token" placeholder="ghp_…" />
+          <span class="hint"><a href="https://github.com/settings/tokens/new?scopes=repo&description=Portfolio+Admin" target="_blank">Generate on GitHub</a> — needs <code>repo</code> scope. Stored in session only, never committed.</span>
+        </div>
+        <div class="field"><label>Branch</label><input type="text" id="gh-branch" value="main" /></div>
+        <div class="field"><label>Config path in repo</label><input type="text" id="gh-path" value="config.js" /></div>
+      </div>
+      <br/><button class="btn" onclick="testGitHub()">Test connection</button>
+      <hr class="divider" />
+      <p style="font-size:.83rem;color:var(--muted);line-height:1.7">
+        <strong style="color:var(--text)">How it works:</strong> Clicking <em>Publish to GitHub</em> serialises all your edits into a new <code>config.js</code> and commits it to your repo via the GitHub API. GitHub Pages rebuilds automatically — live within ~30 seconds.
+      </p>
+    </div>
+
+    <!-- ═══ PASSWORD ══════════════════════════════════ -->
+    <div class="tab-panel" id="tab-password">
+      <div class="section-title">Change Password</div>
+      <div class="pw-box">
+        <p style="font-size:.84rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6">
+          Your password hash is stored only in this browser's <code>localStorage</code> — it is never in the repo or any server.
+          To use the admin panel on another device, open DevTools → Application → Local Storage → copy <code>portfolio_admin_hash</code> to that device.
+        </p>
+        <div class="field" style="margin-bottom:.85rem">
+          <label>Current Password</label>
+          <input type="password" id="pw-current" autocomplete="current-password" />
+        </div>
+        <div class="field" style="margin-bottom:.85rem">
+          <label>New Password</label>
+          <input type="password" id="pw-new" oninput="pwStrength(this.value)" autocomplete="new-password" />
+          <div class="pw-strength"><div class="pw-strength-fill" id="pw-fill"></div></div>
+        </div>
+        <div class="field" style="margin-bottom:1rem">
+          <label>Confirm New Password</label>
+          <input type="password" id="pw-confirm" autocomplete="new-password" />
+        </div>
+        <button class="btn btn-primary" onclick="changePassword()" style="width:auto">Update password</button>
+        <p class="pw-msg err" id="pw-err"></p>
+        <p class="pw-msg ok"  id="pw-ok"></p>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- Publish bar -->
+<div class="publish-bar">
+  <span class="publish-bar-msg" id="publish-msg">All changes are local until you publish.</span>
+  <button class="btn btn-primary" onclick="publish()" id="publish-bar-btn">Publish to GitHub</button>
+</div>
+
+</div><!-- /shell -->
+
+<script src="auth.js"></script>
+<script src="../config.js"></script>
+<script>
+/* ── Guard ── */
+if (!isLoggedIn()) window.location.href = "index.html";
+
+/* ── State ── */
+let state = JSON.parse(JSON.stringify(CONFIG));
+if (!state.services)  state.services  = [];
+if (!state.cv)        state.cv = { pdfPath:null, embedPdf:false, education:[], experience:[], awards:[] };
+if (!state.cv.education)  state.cv.education  = [];
+if (!state.cv.experience) state.cv.experience = [];
+if (!state.cv.awards)     state.cv.awards     = [];
+state.publications.forEach(p => { if (!p.awards) p.awards = []; });
+
+/* ── Tab switching ── */
+const TAB_LABELS = {
+  profile:"Profile", about:"About & Bio", news:"News",
+  publications:"Publications", teaching:"Teaching", services:"Services",
+  cv:"CV", nav:"Navigation", github:"GitHub / Publish", password:"Change Password"
+};
+function switchTab(name) {
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  document.getElementById(`tab-${name}`).classList.add("active");
+  document.querySelectorAll(".nav-item").forEach(n => {
+    if (n.getAttribute("onclick")?.includes(`'${name}'`)) n.classList.add("active");
+  });
+  document.getElementById("topbar-title").textContent = TAB_LABELS[name] || name;
+}
+
+/* ── Helpers ── */
+function esc(s) { return (s||"").replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function toggleCard(id) { document.getElementById(id)?.classList.toggle("open"); }
+
+/* ── Init ── */
+function init() {
+  const p = state.personal;
+  setVal("p-name", p.name); setVal("p-nameLocal", p.nameLocal);
+  setVal("p-title", p.title); setVal("p-institution", p.institution);
+  setVal("p-department", p.department); setVal("p-email", p.email);
+  setVal("p-photo", p.photo);
+  ["github","scholar","linkedin","twitter","dblp","orcid"].forEach(k =>
+    setVal(`s-${k}`, state.social?.[k] || "")
+  );
+
+  // CV settings
+  setVal("cv-pdfPath", state.cv.pdfPath || "");
+  document.getElementById("cv-embedPdf").checked = !!state.cv.embedPdf;
+
+  // GitHub (from session)
+  setVal("gh-repo",   sessionStorage.getItem("gh_repo")   || "");
+  setVal("gh-token",  sessionStorage.getItem("gh_token")  || "");
+  setVal("gh-branch", sessionStorage.getItem("gh_branch") || "main");
+  setVal("gh-path",   sessionStorage.getItem("gh_path")   || "config.js");
+
+  renderAll();
+}
+function setVal(id, v) { const el = document.getElementById(id); if (el) el.value = v; }
+function renderAll() {
+  renderBio(); renderInterests(); renderHobbies(); renderNews();
+  renderPublications(); renderTeaching(); renderServices();
+  renderCvSection("education"); renderCvSection("experience"); renderCvSection("awards");
+  renderNavList();
+}
+
+/* ── Collect ── */
+function collectAll() {
+  state.personal.name        = document.getElementById("p-name").value.trim();
+  state.personal.nameLocal   = document.getElementById("p-nameLocal").value.trim();
+  state.personal.title       = document.getElementById("p-title").value.trim();
+  state.personal.institution = document.getElementById("p-institution").value.trim();
+  state.personal.department  = document.getElementById("p-department").value.trim();
+  state.personal.email       = document.getElementById("p-email").value.trim();
+  state.personal.photo       = document.getElementById("p-photo").value.trim();
+
+  state.social = {};
+  ["github","scholar","linkedin","twitter","dblp","orcid"].forEach(k => {
+    const v = document.getElementById(`s-${k}`)?.value.trim();
+    state.social[k] = v || null;
+  });
+
+  state.cv.pdfPath  = document.getElementById("cv-pdfPath").value.trim() || null;
+  state.cv.embedPdf = document.getElementById("cv-embedPdf").checked;
+
+  // Parse author strings
+  state.publications.forEach((pub, i) => {
+    const raw = document.getElementById(`pub-authors-${i}`)?.value || "";
+    pub.authors = raw.split(",").map(a => {
+      const t = a.trim(); const self = t.endsWith("*");
+      return { name: t.replace(/\*$/, "").trim(), ...(self ? {self:true} : {}) };
+    }).filter(a => a.name);
+  });
+}
+
+/* ─────────────────────────────────────────────
+   BIO
+───────────────────────────────────────────── */
+function renderBio() {
+  document.getElementById("bio-list").innerHTML = (state.about.bio||[]).map((text,i)=>`
+    <div class="card" id="bio-${i}">
+      <div class="card-header" onclick="toggleCard('bio-${i}')">
+        <span class="card-title" style="font-weight:400;color:var(--muted)">${text.replace(/<[^>]+>/g,"").substring(0,90)}…</span>
+        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();removeBio(${i})">Remove</button>
+        <span class="card-chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="field"><label>Paragraph (HTML allowed)</label>
+        <textarea rows="3" onchange="state.about.bio[${i}]=this.value">${esc(text)}</textarea></div>
+      </div>
+    </div>`).join("");
+}
+function addBio() { state.about.bio.push("New paragraph."); renderBio(); }
+function removeBio(i) { state.about.bio.splice(i,1); renderBio(); }
+
+/* ─────────────────────────────────────────────
+   INTERESTS
+───────────────────────────────────────────── */
+function renderInterests() {
+  const wrap = document.getElementById("interests-wrap");
+  wrap.innerHTML = (state.about.interests||[]).map((t,i)=>`
+    <span class="tag-item">${esc(t)}<button onclick="removeInterest(${i})">×</button></span>`).join("") +
+    `<input class="tag-add-input" id="interest-input" placeholder="+ Add interest"
+      onkeydown="if(event.key==='Enter'||event.key===','){event.preventDefault();addInterest()}"/>`;
+}
+function addInterest() {
+  const el = document.getElementById("interest-input");
+  const v = el.value.trim().replace(/,$/,"");
+  if (v) { state.about.interests.push(v); renderInterests(); }
+}
+function removeInterest(i) { state.about.interests.splice(i,1); renderInterests(); }
+
+/* ─────────────────────────────────────────────
+   HOBBIES
+───────────────────────────────────────────── */
+function renderHobbies() {
+  document.getElementById("hobbies-list").innerHTML = (state.about.hobbies||[]).map((text,i)=>`
+    <div class="card">
+      <div class="card-header" style="cursor:default">
+        <input class="inline-input" type="text" value="${esc(text)}" onchange="state.about.hobbies[${i}]=this.value" />
+        <button class="btn btn-danger btn-sm" onclick="removeHobby(${i})">Remove</button>
+      </div>
+    </div>`).join("");
+}
+function addHobby() { state.about.hobbies.push(""); renderHobbies(); }
+function removeHobby(i) { state.about.hobbies.splice(i,1); renderHobbies(); }
+
+/* ─────────────────────────────────────────────
+   NEWS
+───────────────────────────────────────────── */
+function renderNews() {
+  document.getElementById("news-list").innerHTML = (state.news||[]).map((n,i)=>`
+    <div class="card" id="news-${i}">
+      <div class="card-header" onclick="toggleCard('news-${i}')">
+        <span class="card-title" style="font-weight:400">${esc(n.date)} — ${esc(n.text).substring(0,60)}</span>
+        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();removeNews(${i})">Remove</button>
+        <span class="card-chevron">▼</span>
+      </div>
+      <div class="card-body"><div class="form-grid">
+        <div class="field"><label>Date</label><input type="text" value="${esc(n.date)}" onchange="state.news[${i}].date=this.value"/></div>
+        <div class="field full"><label>Text</label><input type="text" value="${esc(n.text)}" onchange="state.news[${i}].text=this.value"/></div>
+        <div class="field"><label>Link URL</label><input type="text" value="${esc(n.link||'')}" onchange="state.news[${i}].link=this.value||null"/></div>
+        <div class="field"><label>Link Text</label><input type="text" value="${esc(n.linkText||'Read more →')}" onchange="state.news[${i}].linkText=this.value"/></div>
+      </div></div>
+    </div>`).join("");
+}
+function addNews() {
+  state.news.push({date:"Month YYYY",text:"News item.",link:null,linkText:"Read more →"});
+  renderNews(); setTimeout(()=>toggleCard(`news-${state.news.length-1}`),50);
+}
+function removeNews(i) { state.news.splice(i,1); renderNews(); }
+
+/* ─────────────────────────────────────────────
+   PUBLICATIONS
+───────────────────────────────────────────── */
+function renderPublications() {
+  document.getElementById("pub-list").innerHTML = (state.publications||[]).map((pub,i)=>`
+    <div class="card" id="pub-${i}">
+      <div class="card-header" onclick="toggleCard('pub-${i}')">
+        <div style="flex:1">
+          <div class="card-title">${esc(pub.title)}</div>
+          <div class="card-meta">${esc(pub.venueShort||pub.venue||'')} · ${pub.year||''}</div>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();removePub(${i})">Remove</button>
+        <span class="card-chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="form-grid">
+          <div class="field full"><label>Title</label><input type="text" value="${esc(pub.title)}" onchange="state.publications[${i}].title=this.value"/></div>
+          <div class="field full">
+            <label>Authors <span style="font-weight:300">(comma-separated; append * to mark yourself)</span></label>
+            <input type="text" id="pub-authors-${i}" value="${pub.authors.map(a=>a.self?a.name+'*':a.name).join(', ')}"/>
+            <span class="hint">e.g. Soumik Kumar Basu*, Jyothi Vedurada</span>
+          </div>
+          <div class="field"><label>Venue (full)</label><input type="text" value="${esc(pub.venue||'')}" onchange="state.publications[${i}].venue=this.value"/></div>
+          <div class="field"><label>Venue short</label><input type="text" value="${esc(pub.venueShort||'')}" onchange="state.publications[${i}].venueShort=this.value"/></div>
+          <div class="field"><label>Year</label><input type="number" value="${pub.year||''}" onchange="state.publications[${i}].year=parseInt(this.value)"/></div>
+          <div class="field"><label>Dates</label><input type="text" value="${esc(pub.dates||'')}" onchange="state.publications[${i}].dates=this.value||null" placeholder="30 Jun – 4 Jul, 2025"/></div>
+          <div class="field"><label>Type</label>
+            <select onchange="state.publications[${i}].type=this.value">
+              ${["Conference Paper","Journal Article","Patent","Workshop Paper"].map(t=>`<option ${pub.type===t?"selected":""}>${t}</option>`).join("")}
+            </select>
+          </div>
+          <div class="field"><label>CORE Rank</label><input type="text" value="${esc(pub.coreRank||'')}" onchange="state.publications[${i}].coreRank=this.value||null" placeholder="A*, A, B…"/></div>
+          <div class="field full"><label>Abstract</label><textarea rows="5" onchange="state.publications[${i}].abstract=this.value">${esc(pub.abstract||'')}</textarea></div>
+          <div class="field full"><label>Citation</label><textarea rows="2" onchange="state.publications[${i}].citation=this.value">${esc(pub.citation||'')}</textarea></div>
+        </div>
+
+        <hr class="divider"/>
+        <div class="section-subtitle" style="margin-top:.5rem">🏆 Awards for this Paper</div>
+        <div id="pub-awards-${i}"></div>
+        <button class="add-btn" onclick="addPubAward(${i})" style="margin-top:.4rem">+ Add award</button>
+
+        <hr class="divider"/>
+        <div class="section-subtitle" style="margin-top:.5rem">Resources</div>
+        <div class="form-grid">
+          <div class="field"><label>PDF path</label><input type="text" value="${esc(pub.resources?.pdf||'')}" onchange="setPubRes(${i},'pdf',this.value||null)"/></div>
+          <div class="field"><label>Artifact URL</label><input type="url" value="${esc(pub.resources?.artifact?.url||'')}" onchange="setPubArtifact(${i},'url',this.value||null)"/></div>
+          <div class="field"><label>Artifact badge</label><input type="text" value="${esc(pub.resources?.artifact?.badge||'')}" onchange="setPubArtifact(${i},'badge',this.value)"/></div>
+          <div class="field"><label>Audio path <span style="font-weight:300;text-transform:none">.mp3/.wav</span></label><input type="text" value="${esc(pub.resources?.audio||'')}" onchange="setPubRes(${i},'audio',this.value||null)" placeholder="Publications/id/summary.mp3"/></div>
+          <div class="field"><label>Video/Presentation path <span style="font-weight:300;text-transform:none">.pdf/.mp4</span></label><input type="text" value="${esc(pub.resources?.video||'')}" onchange="setPubRes(${i},'video',this.value||null)" placeholder="Publications/id/presentation.pdf"/></div>
+          <div class="field"><label>Slides path <span style="font-weight:300;text-transform:none">.pdf in repo</span></label><input type="text" value="${esc(pub.resources?.slides||'')}" onchange="setPubRes(${i},'slides',this.value||null)" placeholder="Publications/id/slides.pdf"/></div>
+          <div class="field"><label>Code (GitHub) URL</label><input type="url" value="${esc(pub.resources?.code||'')}" onchange="setPubRes(${i},'code',this.value||null)"/></div>
+        </div>
+
+        <hr class="divider"/>
+        <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+          <label class="toggle-row">
+            <span class="toggle"><input type="checkbox" ${pub.featured?"checked":""} onchange="state.publications[${i}].featured=this.checked"/><span class="toggle-slider"></span></span>
+            Show on homepage
+          </label>
+          <label class="toggle-row">
+            <span class="toggle"><input type="checkbox" ${pub.detail?"checked":""} onchange="state.publications[${i}].detail=this.checked"/><span class="toggle-slider"></span></span>
+            Has detail page
+          </label>
+        </div>
+      </div>
+    </div>`).join("");
+
+  // Render awards sub-lists
+  state.publications.forEach((pub,i) => renderPubAwards(i));
+}
+
+function renderPubAwards(i) {
+  const el = document.getElementById(`pub-awards-${i}`);
+  if (!el) return;
+  const awards = state.publications[i].awards || [];
+  if (!awards.length) {
+    el.innerHTML = `<p style="font-size:.8rem;color:var(--muted);margin-bottom:.25rem">No awards yet.</p>`;
+    return;
+  }
+  el.innerHTML = awards.map((a,j)=>`
+    <div class="award-row" style="margin-bottom:.5rem">
+      <input type="text" class="field input" value="${esc(a.title)}"
+        onchange="state.publications[${i}].awards[${j}].title=this.value"
+        placeholder="Award title"
+        style="font-family:var(--ff);font-size:.85rem;padding:.45rem .7rem;border:1px solid var(--border);border-radius:3px;flex:1.5;outline:none"/>
+      <input type="text" value="${esc(a.body||'')}"
+        onchange="state.publications[${i}].awards[${j}].body=this.value"
+        placeholder="Awarded by / venue"
+        style="font-family:var(--ff);font-size:.85rem;padding:.45rem .7rem;border:1px solid var(--border);border-radius:3px;flex:1;outline:none"/>
+      <input type="number" value="${a.year||''}"
+        onchange="state.publications[${i}].awards[${j}].year=parseInt(this.value)||null"
+        placeholder="Year"
+        style="font-family:var(--ff);font-size:.85rem;padding:.45rem .7rem;border:1px solid var(--border);border-radius:3px;width:80px;outline:none"/>
+      <button class="btn btn-danger btn-sm" onclick="removePubAward(${i},${j})">✕</button>
+    </div>`).join("");
+}
+
+function addPubAward(i) {
+  if (!state.publications[i].awards) state.publications[i].awards = [];
+  state.publications[i].awards.push({title:"",body:"",year:null});
+  renderPubAwards(i);
+}
+function removePubAward(i,j) {
+  state.publications[i].awards.splice(j,1); renderPubAwards(i);
+}
+function setPubRes(i,key,val) {
+  if (!state.publications[i].resources) state.publications[i].resources = {};
+  state.publications[i].resources[key] = val;
+}
+function setPubArtifact(i,key,val) {
+  if (!state.publications[i].resources) state.publications[i].resources = {};
+  if (!state.publications[i].resources.artifact) state.publications[i].resources.artifact = {};
+  state.publications[i].resources.artifact[key] = val;
+  if (key==="url") state.publications[i].resources.artifact.available = !!val;
+}
+function addPublication() {
+  state.publications.push({
+    id:"pub-"+Date.now(), title:"New Publication", authors:[{name:state.personal.name,self:true}],
+    venue:"", venueShort:"", year:new Date().getFullYear(),
+    type:"Conference Paper", featured:false, detail:false, awards:[], resources:{}
+  });
+  renderPublications();
+  setTimeout(()=>toggleCard(`pub-${state.publications.length-1}`),50);
+}
+function removePub(i) {
+  if (confirm("Remove this publication?")) { state.publications.splice(i,1); renderPublications(); }
+}
+
+/* ─────────────────────────────────────────────
+   TEACHING
+───────────────────────────────────────────── */
+function renderTeaching() {
+  const list = document.getElementById("teaching-list");
+  if (!state.teaching?.length) {
+    list.innerHTML = `<p style="font-size:.84rem;color:var(--muted)">No teaching history added yet.</p>`;
+    return;
+  }
+  list.innerHTML = state.teaching.map((t,i)=>`
+    <div class="card" id="teach-${i}">
+      <div class="card-header" onclick="toggleCard('teach-${i}')">
+        <span class="card-title" style="font-weight:400">${esc(t.course||'Untitled')} · ${esc(t.term||'')}</span>
+        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();removeTeaching(${i})">Remove</button>
+        <span class="card-chevron">▼</span>
+      </div>
+      <div class="card-body"><div class="form-grid">
+        <div class="field full"><label>Course</label><input type="text" value="${esc(t.course||'')}" onchange="state.teaching[${i}].course=this.value"/></div>
+        <div class="field"><label>Role</label><input type="text" value="${esc(t.role||'')}" onchange="state.teaching[${i}].role=this.value"/></div>
+        <div class="field"><label>Term</label><input type="text" value="${esc(t.term||'')}" onchange="state.teaching[${i}].term=this.value"/></div>
+        <div class="field"><label>Institution</label><input type="text" value="${esc(t.institution||'')}" onchange="state.teaching[${i}].institution=this.value"/></div>
+      </div></div>
+    </div>`).join("");
+}
+function addTeaching() {
+  if (!state.teaching) state.teaching = [];
+  state.teaching.push({course:"",role:"Teaching Assistant",term:"",institution:state.personal.institution||""});
+  renderTeaching();
+}
+function removeTeaching(i) { state.teaching.splice(i,1); renderTeaching(); }
+
+/* ─────────────────────────────────────────────
+   SERVICES
+───────────────────────────────────────────── */
+function renderServices() {
+  const list = document.getElementById("services-list");
+  if (!state.services?.length) {
+    list.innerHTML = `<p style="font-size:.84rem;color:var(--muted)">No services added yet.</p>`;
+    return;
+  }
+  list.innerHTML = state.services.map((s,i)=>`
+    <div class="card" id="svc-${i}">
+      <div class="card-header" onclick="toggleCard('svc-${i}')">
+        <div style="flex:1">
+          <div class="card-title" style="font-weight:400">${esc(s.role||'Untitled')}</div>
+          <div class="card-meta">${esc(s.venue||'')} · ${s.year||''}</div>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();removeService(${i})">Remove</button>
+        <span class="card-chevron">▼</span>
+      </div>
+      <div class="card-body"><div class="form-grid">
+        <div class="field"><label>Role</label><input type="text" value="${esc(s.role||'')}" onchange="state.services[${i}].role=this.value" placeholder="e.g. Reviewer, PC Member"/></div>
+        <div class="field"><label>Type</label>
+          <select onchange="state.services[${i}].type=this.value">
+            ${["Review","Committee","Volunteer","Organisation","Other"].map(t=>`<option ${(s.type||"Review")===t?"selected":""}>${t}</option>`).join("")}
+          </select>
+        </div>
+        <div class="field"><label>Venue short</label><input type="text" value="${esc(s.venue||'')}" onchange="state.services[${i}].venue=this.value" placeholder="PLDI 2025"/></div>
+        <div class="field"><label>Venue full name</label><input type="text" value="${esc(s.venueFull||'')}" onchange="state.services[${i}].venueFull=this.value||null"/></div>
+        <div class="field"><label>Year</label><input type="number" value="${s.year||''}" onchange="state.services[${i}].year=parseInt(this.value)"/></div>
+        <div class="field full"><label>Description <span style="font-weight:300">(optional)</span></label>
+          <input type="text" value="${esc(s.description||'')}" onchange="state.services[${i}].description=this.value||null"/></div>
+      </div></div>
+    </div>`).join("");
+}
+function addService() {
+  if (!state.services) state.services = [];
+  state.services.push({role:"",type:"Review",venue:"",venueFull:null,year:new Date().getFullYear(),description:null});
+  renderServices(); setTimeout(()=>toggleCard(`svc-${state.services.length-1}`),50);
+}
+function removeService(i) { state.services.splice(i,1); renderServices(); }
+
+/* ─────────────────────────────────────────────
+   CV SECTIONS (education / experience / awards)
+───────────────────────────────────────────── */
+const CV_TEMPLATES = {
+  education:  {degree:"",institution:"",period:"",details:""},
+  experience: {role:"",org:"",period:"",details:""},
+  awards:     {title:"",body:"",year:new Date().getFullYear()},
+};
+const CV_FIELDS = {
+  education:  [{k:"degree",l:"Degree / Programme"},{k:"institution",l:"Institution"},{k:"period",l:"Period"},{k:"details",l:"Details"}],
+  experience: [{k:"role",l:"Role / Position"},{k:"org",l:"Organisation"},{k:"period",l:"Period"},{k:"details",l:"Details"}],
+  awards:     [{k:"title",l:"Award Title"},{k:"body",l:"Awarded by / Venue"},{k:"year",l:"Year",type:"number"}],
+};
+
+function renderCvSection(section) {
+  const list  = document.getElementById(`cv-${section}-list`);
+  const items = state.cv[section] || [];
+  if (!items.length) {
+    list.innerHTML = `<p style="font-size:.84rem;color:var(--muted)">None added yet.</p>`; return;
+  }
+  list.innerHTML = items.map((item,i)=>{
+    const preview = section==="education" ? item.degree : section==="experience" ? item.role : item.title;
+    const sub     = section==="education" ? item.institution : section==="experience" ? item.org : item.body;
+    return `
+    <div class="card" id="cv-${section}-${i}">
+      <div class="card-header" onclick="toggleCard('cv-${section}-${i}')">
+        <div style="flex:1">
+          <div class="card-title" style="font-weight:400">${esc(preview||'Untitled')}</div>
+          ${sub ? `<div class="card-meta">${esc(sub)}</div>` : ""}
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();removeCvItem('${section}',${i})">Remove</button>
+        <span class="card-chevron">▼</span>
+      </div>
+      <div class="card-body"><div class="form-grid">
+        ${CV_FIELDS[section].map(f=>`
+          <div class="field ${(f.k==="details"||f.k==="degree"||f.k==="role"||f.k==="title")?"full":""}">
+            <label>${f.l}</label>
+            <input type="${f.type||'text'}" value="${esc(item[f.k]||'')}"
+              onchange="state.cv['${section}'][${i}]['${f.k}']=this.value${f.type==='number'?'|0':''}"/>
+          </div>`).join("")}
+      </div></div>
+    </div>`}).join("");
+}
+function addCvItem(section, template) {
+  if (!state.cv[section]) state.cv[section] = [];
+  state.cv[section].push({...template});
+  renderCvSection(section); setTimeout(()=>toggleCard(`cv-${section}-${state.cv[section].length-1}`),50);
+}
+function removeCvItem(section, i) { state.cv[section].splice(i,1); renderCvSection(section); }
+
+/* ─────────────────────────────────────────────
+   NAV
+───────────────────────────────────────────── */
+function renderNavList() {
+  document.getElementById("nav-list").innerHTML = (state.nav||[]).map((n,i)=>`
+    <div class="card">
+      <div class="card-header" style="cursor:default">
+        <input class="inline-input" type="text" value="${esc(n.label||'')}"
+          onchange="state.nav[${i}].label=this.value" placeholder="Label" style="max-width:140px"/>
+        <input class="inline-input" type="text" value="${esc(n.href||'')}"
+          onchange="state.nav[${i}].href=this.value" placeholder="href"
+          style="font-family:var(--mono);font-size:.78rem;color:var(--muted)"/>
+        <button class="btn btn-danger btn-sm" onclick="removeNav(${i})">Remove</button>
+      </div>
+    </div>`).join("");
+}
+function addNav() { state.nav.push({label:"New",href:"#"}); renderNavList(); }
+function removeNav(i) { state.nav.splice(i,1); renderNavList(); }
+
+/* ─────────────────────────────────────────────
+   GITHUB
+───────────────────────────────────────────── */
+async function testGitHub() {
+  const repo=document.getElementById("gh-repo").value.trim(),
+        token=document.getElementById("gh-token").value.trim(),
+        branch=document.getElementById("gh-branch").value.trim()||"main",
+        path=document.getElementById("gh-path").value.trim()||"config.js";
+  const el=document.getElementById("gh-status"), tx=document.getElementById("gh-status-text");
+  el.className="gh-status idle"; tx.textContent="Testing…";
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}`,
+      {headers:{Authorization:`token ${token}`,Accept:"application/vnd.github.v3+json"}});
+    const data = await res.json();
+    if (res.ok) {
+      el.className="gh-status ok"; tx.textContent="Connected! Repository and file found.";
+      sessionStorage.setItem("gh_repo",repo); sessionStorage.setItem("gh_token",token);
+      sessionStorage.setItem("gh_branch",branch); sessionStorage.setItem("gh_path",path);
+    } else { el.className="gh-status err"; tx.textContent=`Error ${res.status}: ${data.message}`; }
+  } catch(e) { el.className="gh-status err"; tx.textContent="Network error: "+e.message; }
+}
+
+/* ─────────────────────────────────────────────
+   PUBLISH
+───────────────────────────────────────────── */
+function stateToConfigJs(s) {
+  return `/**\n * ============================================================\n *  PORTFOLIO CONFIG — edit this file to update the entire site\n *  Last updated: ${new Date().toISOString()}\n * ============================================================\n */\n\nconst CONFIG = ${JSON.stringify(s,null,2)};\n`;
+}
+
+async function publish() {
+  collectAll();
+  const repo   = document.getElementById("gh-repo").value.trim()   || sessionStorage.getItem("gh_repo")   || "";
+  const token  = document.getElementById("gh-token").value.trim()  || sessionStorage.getItem("gh_token")  || "";
+  const branch = document.getElementById("gh-branch").value.trim() || sessionStorage.getItem("gh_branch") || "main";
+  const path   = document.getElementById("gh-path").value.trim()   || sessionStorage.getItem("gh_path")   || "config.js";
+  const msg = document.getElementById("publish-msg");
+  const btns = [document.getElementById("publish-btn"), document.getElementById("publish-bar-btn")];
+
+  if (!repo||!token) { switchTab("github"); msg.className="publish-bar-msg error"; msg.textContent="⚠ Set up GitHub connection first."; return; }
+
+  btns.forEach(b=>{if(b){b.disabled=true;b.textContent="Publishing…";}});
+  msg.className="publish-bar-msg"; msg.textContent="Connecting to GitHub…";
+
+  try {
+    const getRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}`,
+      {headers:{Authorization:`token ${token}`,Accept:"application/vnd.github.v3+json"}});
+    const existing = await getRes.json();
+    if (!getRes.ok) throw new Error(existing.message);
+
+    const putRes = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+      method:"PUT",
+      headers:{Authorization:`token ${token}`,Accept:"application/vnd.github.v3+json","Content-Type":"application/json"},
+      body:JSON.stringify({
+        message:`Portfolio update — ${new Date().toLocaleString()}`,
+        content:btoa(unescape(encodeURIComponent(stateToConfigJs(state)))),
+        sha:existing.sha, branch
+      })
+    });
+    const result = await putRes.json();
+    if (!putRes.ok) throw new Error(result.message);
+    msg.className="publish-bar-msg success";
+    msg.textContent=`✓ Published at ${new Date().toLocaleTimeString()} — live in ~30 seconds.`;
+  } catch(e) {
+    msg.className="publish-bar-msg error"; msg.textContent="Publish failed: "+e.message;
+  }
+  btns.forEach(b=>{if(b){b.disabled=false;b.textContent=b.id==="publish-btn"?"Publish to GitHub":"Publish to GitHub";}});
+}
+
+/* ─────────────────────────────────────────────
+   CHANGE PASSWORD
+───────────────────────────────────────────── */
+function pwStrength(pw) {
+  const fill = document.getElementById("pw-fill");
+  let s = 0;
+  if (pw.length>=8) s++; if (pw.length>=12) s++;
+  if (/[A-Z]/.test(pw)&&/[a-z]/.test(pw)) s++;
+  if (/[0-9]/.test(pw)) s++;
+  if (/[^A-Za-z0-9]/.test(pw)) s++;
+  fill.style.width = (s/5*100)+"%";
+  fill.style.background = ["#e74c3c","#e67e22","#f1c40f","#2ecc71","#27ae60"][Math.max(0,s-1)];
+}
+async function changePassword() {
+  const cur=document.getElementById("pw-current").value,
+        nw=document.getElementById("pw-new").value,
+        cf=document.getElementById("pw-confirm").value;
+  const err=document.getElementById("pw-err"), ok=document.getElementById("pw-ok");
+  err.classList.remove("show"); ok.classList.remove("show");
+
+  if (!(await checkPassword(cur))) { err.textContent="Current password is incorrect."; err.classList.add("show"); return; }
+  if (nw.length<8) { err.textContent="New password must be at least 8 characters."; err.classList.add("show"); return; }
+  if (nw!==cf) { err.textContent="Passwords do not match."; err.classList.add("show"); return; }
+
+  await setPassword(nw);
+  setSession(); // refresh session with new hash
+  ok.textContent="Password updated successfully."; ok.classList.add("show");
+  document.getElementById("pw-current").value="";
+  document.getElementById("pw-new").value="";
+  document.getElementById("pw-confirm").value="";
+  document.getElementById("pw-fill").style.width="0";
+}
+
+/* ── Boot ── */
+init();
+</script>
+</body>
+</html>

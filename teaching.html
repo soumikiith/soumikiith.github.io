@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teaching</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="config.js" defer></script>
+  <script src="common.js" defer></script>
+  <script defer>
+  document.addEventListener("DOMContentLoaded", () => {
+    initPage("teaching.html");
+    document.title = `Teaching · ${CONFIG.personal.name}`;
+
+    const container = document.getElementById("teaching-list");
+    if (!CONFIG.teaching || CONFIG.teaching.length === 0) {
+      container.innerHTML = `<p class="empty-state">Teaching history coming soon.</p>`;
+      return;
+    }
+    container.innerHTML = `<ul class="pub-list">
+      ${CONFIG.teaching.map(t => `
+        <li class="pub-entry">
+          <div class="pub-entry-title">${t.course}</div>
+          <div class="pub-entry-authors">${t.role}</div>
+          <div class="pub-entry-meta">${t.institution} · ${t.term}</div>
+        </li>
+      `).join("")}
+    </ul>`;
+  });
+  </script>
+</head>
+<body>
+
+<header style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-nav"></div>
+</header>
+
+<main class="page-wrap">
+  <div class="generic-page">
+    <h1>Teaching</h1>
+    <div id="teaching-list"></div>
+  </div>
+</main>
+
+<footer style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-footer"></div>
+</footer>
+
+</body>
+</html>

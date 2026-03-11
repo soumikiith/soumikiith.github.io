@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publications</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="config.js" defer></script>
+  <script src="common.js" defer></script>
+  <script defer>
+  document.addEventListener("DOMContentLoaded", () => {
+    initPage("publications.html");
+    document.title = `Publications · ${CONFIG.personal.name}`;
+
+    /* ── Build filter buttons ── */
+    const types = ["All", ...new Set(CONFIG.publications.map(p => p.type))];
+    const filters = document.getElementById("pub-filters");
+    filters.innerHTML = types.map((t, i) =>
+      `<button class="filter-btn${i===0?" active":""}" data-type="${t}">${t}</button>`
+    ).join("");
+
+    filters.addEventListener("click", e => {
+      const btn = e.target.closest(".filter-btn");
+      if (!btn) return;
+      filters.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const type = btn.dataset.type;
+      document.querySelectorAll(".pub-entry").forEach(el => {
+        el.classList.toggle("hidden", type !== "All" && el.dataset.type !== type);
+      });
+      // Hide/show year headings if empty
+      document.querySelectorAll(".pub-year-group").forEach(group => {
+        const visible = group.querySelectorAll(".pub-entry:not(.hidden)").length > 0;
+        group.style.display = visible ? "" : "none";
+      });
+    });
+
+    /* ── Group publications by year ── */
+    const byYear = {};
+    CONFIG.publications.forEach(pub => {
+      if (!byYear[pub.year]) byYear[pub.year] = [];
+      byYear[pub.year].push(pub);
+    });
+
+    const container = document.getElementById("pub-container");
+    const years = Object.keys(byYear).sort((a, b) => b - a);
+
+    container.innerHTML = years.map(year => `
+      <div class="pub-year-group">
+        <div class="pub-year">${year}</div>
+        <ul class="pub-list">
+          ${byYear[year].map(pub => {
+            const href = pub.detail ? `publication.html?id=${pub.id}` : null;
+            return `
+            <li class="pub-entry" data-type="${pub.type}">
+              <div class="pub-entry-title">
+                ${href ? `<a href="${href}">${pub.title}</a>` : pub.title}
+              </div>
+              <div class="pub-entry-authors">${formatAuthors(pub.authors)}</div>
+              <div class="pub-entry-meta">
+                <span style="font-style:italic">${pub.venue}</span>
+                ${typeBadge(pub)}
+                ${pub.resources?.pdf ? `<a href="${pub.resources.pdf}" class="pub-link" target="_blank" style="margin-left:.2rem">PDF</a>` : ""}
+                ${href ? `<a href="${href}" class="pub-link">Details</a>` : ""}
+              </div>
+            </li>`;
+          }).join("")}
+        </ul>
+      </div>
+    `).join("");
+  });
+  </script>
+</head>
+<body>
+
+<header style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-nav"></div>
+</header>
+
+<main class="page-wrap">
+  <div class="pub-page-header">
+    <h1>Publications</h1>
+  </div>
+
+  <div id="pub-filters" class="pub-filters"></div>
+  <div id="pub-container"></div>
+</main>
+
+<footer style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-footer"></div>
+</footer>
+
+</body>
+</html>

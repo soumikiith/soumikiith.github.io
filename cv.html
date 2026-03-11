@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="config.js" defer></script>
+  <script src="common.js" defer></script>
+  <script defer>
+  document.addEventListener("DOMContentLoaded", () => {
+    initPage("cv.html");
+    document.title = `CV · ${CONFIG.personal.name}`;
+
+    const cv = CONFIG.cv || {};
+
+    /* ── PDF download button ── */
+    const dlBtn = document.getElementById("cv-download");
+    if (cv.pdfPath) {
+      dlBtn.innerHTML = `<a href="${cv.pdfPath}" target="_blank" class="pub-link" style="font-size:.82rem">Download PDF →</a>`;
+    } else {
+      dlBtn.style.display = "none";
+    }
+
+    /* ── PDF embed ── */
+    const embedWrap = document.getElementById("cv-embed");
+    if (cv.pdfPath && cv.embedPdf) {
+      embedWrap.innerHTML = `<iframe src="${cv.pdfPath}" width="100%" height="880"
+        style="border:1px solid var(--border);border-radius:3px;display:block;margin-top:1.5rem"></iframe>`;
+    }
+
+    /* ── Education ── */
+    renderCvSection(
+      "cv-education", cv.education || [],
+      e => `
+        <div class="cv-entry">
+          <div class="cv-entry-top">
+            <span class="cv-entry-title">${e.degree}</span>
+            <span class="cv-entry-period">${e.period || ""}</span>
+          </div>
+          <div class="cv-entry-sub">${e.institution}</div>
+          ${e.details ? `<div class="cv-entry-desc">${e.details}</div>` : ""}
+        </div>`
+    );
+
+    /* ── Experience ── */
+    renderCvSection(
+      "cv-experience", cv.experience || [],
+      e => `
+        <div class="cv-entry">
+          <div class="cv-entry-top">
+            <span class="cv-entry-title">${e.role}</span>
+            <span class="cv-entry-period">${e.period || ""}</span>
+          </div>
+          <div class="cv-entry-sub">${e.org}</div>
+          ${e.details ? `<div class="cv-entry-desc">${e.details}</div>` : ""}
+        </div>`
+    );
+
+    /* ── Awards (from cv.awards + aggregated from publications) ── */
+    const cvAwards  = cv.awards || [];
+    const pubAwards = (CONFIG.publications || []).flatMap(p =>
+      (p.awards || []).map(a => ({ ...a, pub: p.title, pubId: p.id, pubDetail: p.detail }))
+    );
+    const allAwards = [...cvAwards, ...pubAwards];
+
+    const awardsEl = document.getElementById("cv-awards");
+    if (!allAwards.length) {
+      awardsEl.closest(".cv-section").style.display = "none";
+    } else {
+      awardsEl.innerHTML = allAwards.map(a => `
+        <div class="cv-entry">
+          <div class="cv-entry-top">
+            <span class="cv-entry-title">🏆 ${a.title}</span>
+            ${a.year ? `<span class="cv-entry-period">${a.year}</span>` : ""}
+          </div>
+          <div class="cv-entry-sub">
+            ${a.body || ""}
+            ${a.pub
+              ? ` · <em>${a.pubDetail
+                  ? `<a href="publication.html?id=${a.pubId}" style="color:var(--muted)">${a.pub}</a>`
+                  : a.pub}</em>`
+              : ""}
+          </div>
+        </div>`).join("");
+    }
+
+    /* ── Publications summary ── */
+    const pubs = (CONFIG.publications || []);
+    const pubsEl = document.getElementById("cv-publications");
+    if (!pubs.length) {
+      pubsEl.closest(".cv-section").style.display = "none";
+    } else {
+      pubsEl.innerHTML = pubs.map(pub => `
+        <div class="cv-entry">
+          <div class="cv-entry-top">
+            <span class="cv-entry-title" style="font-weight:400">
+              ${pub.detail ? `<a href="publication.html?id=${pub.id}" style="color:var(--text)">${pub.title}</a>` : pub.title}
+            </span>
+            <span class="cv-entry-period">${pub.year}</span>
+          </div>
+          <div class="cv-entry-sub">
+            ${formatAuthors(pub.authors)} · <em>${pub.venueShort || pub.venue}</em>
+            ${pub.coreRank ? ` · CORE ${pub.coreRank}` : ""}
+          </div>
+        </div>`).join("");
+    }
+
+    /* ── Teaching summary ── */
+    renderCvSection(
+      "cv-teaching", CONFIG.teaching || [],
+      t => `
+        <div class="cv-entry">
+          <div class="cv-entry-top">
+            <span class="cv-entry-title" style="font-weight:400">${t.course}</span>
+            <span class="cv-entry-period">${t.term}</span>
+          </div>
+          <div class="cv-entry-sub">${t.role} · ${t.institution}</div>
+        </div>`
+    );
+  });
+
+  function renderCvSection(id, items, tpl) {
+    const el = document.getElementById(id);
+    if (!items.length) {
+      el.closest(".cv-section").style.display = "none";
+    } else {
+      el.innerHTML = items.map(tpl).join("");
+    }
+  }
+
+  // formatAuthors available via common.js
+  </script>
+  <style>
+    .cv-header {
+      padding: 2.8rem 0 1.4rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+    .cv-header h1 { font-size: 1.75rem; font-weight: 400; }
+
+    .cv-section { margin-top: 2.5rem; }
+
+    .cv-entry {
+      padding: .85rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .cv-entry:first-child { border-top: 1px solid var(--border); }
+    .cv-entry-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .cv-entry-title {
+      font-size: .97rem;
+      font-weight: 500;
+      flex: 1;
+    }
+    .cv-entry-period {
+      font-family: var(--ff-mono);
+      font-size: .75rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .cv-entry-sub {
+      font-family: var(--ff-sans);
+      font-size: .84rem;
+      color: var(--muted);
+      margin-top: .2rem;
+    }
+    .cv-entry-desc {
+      font-size: .85rem;
+      color: var(--muted);
+      margin-top: .2rem;
+    }
+  </style>
+</head>
+<body>
+
+<header style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-nav"></div>
+</header>
+
+<main class="page-wrap">
+  <div class="cv-header">
+    <h1>Curriculum Vitae</h1>
+    <div id="cv-download"></div>
+  </div>
+
+  <div id="cv-embed"></div>
+
+  <div class="cv-section" id="sec-education">
+    <p class="section-label">Education</p>
+    <div id="cv-education"></div>
+  </div>
+
+  <div class="cv-section" id="sec-experience">
+    <p class="section-label">Experience</p>
+    <div id="cv-experience"></div>
+  </div>
+
+  <div class="cv-section">
+    <p class="section-label">Publications</p>
+    <div id="cv-publications"></div>
+  </div>
+
+  <div class="cv-section">
+    <p class="section-label">Awards &amp; Honors</p>
+    <div id="cv-awards"></div>
+  </div>
+
+  <div class="cv-section">
+    <p class="section-label">Teaching</p>
+    <div id="cv-teaching"></div>
+  </div>
+
+</main>
+
+<footer style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-footer"></div>
+</footer>
+
+</body>
+</html>

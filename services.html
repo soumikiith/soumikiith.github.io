@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="config.js" defer></script>
+  <script src="common.js" defer></script>
+  <script defer>
+  document.addEventListener("DOMContentLoaded", () => {
+    initPage("services.html");
+    document.title = `Services · ${CONFIG.personal.name}`;
+
+    const container = document.getElementById("services-container");
+    const services  = CONFIG.services || [];
+
+    if (!services.length) {
+      container.innerHTML = `<p class="empty-state">No services listed yet.</p>`;
+      return;
+    }
+
+    // Group by type
+    const types = [...new Set(services.map(s => s.type || "Other"))];
+    container.innerHTML = types.map(type => {
+      const items = services.filter(s => (s.type || "Other") === type);
+      return `
+        <div class="service-group">
+          <p class="section-label">${type}</p>
+          <ul class="service-list">
+            ${items.map(s => `
+              <li class="service-entry">
+                <div class="service-entry-role">${s.role}</div>
+                <div class="service-entry-venue">
+                  ${s.venueFull
+                    ? `<span title="${s.venueFull}">${s.venue}</span>`
+                    : `<span>${s.venue}</span>`}
+                  <span class="service-year">${s.year}</span>
+                </div>
+                ${s.description ? `<div class="service-entry-desc">${s.description}</div>` : ""}
+              </li>
+            `).join("")}
+          </ul>
+        </div>`;
+    }).join("");
+  });
+  </script>
+  <style>
+    .service-group { margin-bottom: 2.5rem; }
+    .service-list  { list-style: none; }
+    .service-entry {
+      padding: .85rem 0;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: .15rem .75rem;
+      align-items: baseline;
+    }
+    .service-entry:first-child { border-top: 1px solid var(--border); }
+    .service-entry-role {
+      font-size: .95rem;
+      font-weight: 500;
+      grid-column: 1;
+    }
+    .service-entry-venue {
+      font-family: var(--ff-sans);
+      font-size: .83rem;
+      color: var(--muted);
+      font-style: italic;
+      grid-column: 1;
+      display: flex;
+      gap: .6rem;
+      align-items: center;
+    }
+    .service-year {
+      font-family: var(--ff-mono);
+      font-size: .75rem;
+      font-style: normal;
+      color: var(--faint);
+    }
+    .service-entry-desc {
+      font-size: .85rem;
+      color: var(--muted);
+      grid-column: 1 / -1;
+      margin-top: .15rem;
+    }
+  </style>
+</head>
+<body>
+
+<header style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-nav"></div>
+</header>
+
+<main class="page-wrap">
+  <div class="pub-page-header">
+    <h1>Services</h1>
+  </div>
+  <div id="services-container" style="margin-top:2rem"></div>
+</main>
+
+<footer style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-footer"></div>
+</footer>
+
+</body>
+</html>
