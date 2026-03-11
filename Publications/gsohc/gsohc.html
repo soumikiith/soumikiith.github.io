@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publication Title - Researcher Portfolio</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Audio player styles */
+        .audio-player {
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        .audio-resources {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .audio-item {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .audio-btn, .artifact-link, .download-btn {
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        /* Audio progress bar styles */
+        .audio-progress-container {
+            margin: 15px 0;
+        }
+        
+        .audio-progress {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+            margin-bottom: 5px;
+            overflow: hidden;
+        }
+        
+        .audio-progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: #4a6fa5;
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+        
+        .audio-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        /* For debugging */
+        .audio-debug {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            display: none;
+        }
+        
+        /* New styles for side by side layout */
+        .multimedia-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .multimedia-item {
+            flex: 1;
+            min-width: 280px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .multimedia-item {
+                min-width: 100%;
+            }
+        }
+        
+        /* Badge styles */
+        .resource-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            margin-right: 8px;
+            margin-bottom: 5px;
+        }
+        
+        .badge-evaluated {
+            background-color: #4c1;
+        }
+        
+        .badge-available {
+            background-color: #17a;
+        }
+        
+        .badge-award {
+            background-color: #e94;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">Portfolio</div>
+            <div class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../publications.html" class="active">Publications</a></li>
+                <li><a href="../../teaching.html">Teaching</a></li>
+                <li><a href="../../cv.html">CV</a></li>
+                <li><a href="../../services.html">Services</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Publication Detail Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>GSOHC: Global Synchronization Optimization in Heterogeneous Computing</h1>
+        </div>
+    </div>
+
+    <!-- Publication Detail Content -->
+    <section class="publication-detail">
+        <div class="container">
+            <div class="publication-metadata">
+                <p class="publication-authors">
+                    <b>Soumik Kumar Basu</b> and Jyothi Vedurada
+                </p>
+                <p class="publication-journal">
+                    European Conference on Object-Oriented Programming, 30 Jun - 4 Jul, 2025
+                </p>
+                <div class="publication-badges">
+                    <span class="badge journal-badge">Conference Paper</span>
+                    <span class="badge impact-badge">CORE: A</span>
+                </div>
+            </div>
+
+            <div class="publication-content">
+                <div class="publication-section abstract-section">
+                    <h2>Abstract</h2>
+                    <p align="justify">
+                        The use of heterogeneous systems has become widespread and popular in the past decade with more than one type of processor, such as CPUs, GPUs (Graphics Processing Units), and FPGAs (Field Programmable Gate Arrays) etc. A wide range of applications use both CPU and GPU to leverage the benefits of their unique features and strengths. Therefore, collaborative computation between CPU and GPU is essential to achieve high program performance. However, poorly placed global synchronization barriers and synchronous memory transfers are the main bottlenecks to enhanced program performance, preventing CPU and GPU computations from overlapping.
+                        
+                        <br>Based on this observation, we propose a new optimization technique called hetero-sync motion that can relocate such barrier instructions to new locations, resulting in improved performance in CPU GPU heterogeneous programs. Further, we propose GSOHC, a compiler analysis and optimization framework that automatically finds opportunities for hetero-sync motion in the input program and then performs code transformation to apply the optimization. Our static analysis is a context-sensitive, flow-sensitive inter-procedural data-flow analysis with three phases to identify the optimization opportunities precisely. We have implemented GSOHC using LLVM/Clang infrastructure. On A4000, P100 and A100 GPUs, our optimization achieves up to 1.8x, up to 1.9x and up to 1.9x speedups over baseline, respectively.
+                    </p>
+                </div>
+
+                <!-- Research Resources Section (3 columns) -->
+                <div class="publication-section">
+                    <h2>Research Resources</h2>
+                    <div class="multimedia-container">
+                        <!-- Research Paper Section -->
+                        <div class="multimedia-item">
+                            <h3>Research Paper</h3>
+                            <a href="GSOHC_ECOOP_2025.pdf" class="btn download-btn">
+                                <i class="fas fa-file-pdf"></i> Download PDF
+                            </a>
+                            <p>Full research paper available for download and citation.</p>
+                            <!-- <div style="margin-top: 15px">
+                                <span class="resource-badge badge-award">
+                                    <i class="fas fa-award"></i> Best Paper Award
+                                </span>
+                            </div> -->
+                        </div>
+                        
+                        <!-- Artifact Section -->
+                        <div class="multimedia-item">
+                            <h3>Research Artifact</h3>
+                            <a href="https://doi.org/10.5281/zenodo.15302892" class="btn artifact-link">
+                                <i class="fas fa-cube"></i> Access Artifact
+                            </a>
+                            <p>Explore the implementation code, benchmark datasets, and evaluation scripts used in our research.</p>
+                            
+                            <div class="artifact-badges" style="margin-top: 15px">
+                                <span class="resource-badge badge-evaluated">
+                                    <i class="fas fa-check-circle"></i> Functional/Reusable
+                                </span>
+                                <span class="resource-badge badge-available">
+                                    <i class="fas fa-star"></i> Available
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Audio Section -->
+                        <div class="multimedia-item">
+                            <h3>Audio Summary</h3>
+                            <button type="button" class="btn audio-btn">
+                                <i class="fas fa-play"></i> Play Summary
+                            </button>
+                            <p>Listen to the comprehensive audio summary of GSOHC research.</p>
+                            <div class="audio-progress-container">
+                                <div class="audio-progress">
+                                    <div class="audio-progress-bar" id="audioProgressBar"></div>
+                                </div>
+                                <div class="audio-time">
+                                    <span id="currentTime">0:00</span>  <span id="duration">0:00</span>
+                                </div>
+                            </div>
+                            <audio id="summary-audio" class="audio-player" preload="auto">
+                                <source src="gsohc-summary.wav" type="audio/wav">
+                                <source src="gsohc-summary.mp3" type="audio/mpeg">
+                                <source src="gsohc-summary.ogg" type="audio/ogg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Online Presentation Section -->
+                <div class="publication-section">
+                    <h2>Conference Presentation</h2>
+                    <div class="video-container">
+                        <iframe 
+                            width="100%" 
+                            height="450" 
+                            src="ecoop_presentation.pdf" 
+                            title="Research Presentation" 
+                            frameborder="0" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <p style="margin-top: 15px; font-style: italic;">Watch the full presentation from ECOOP 2025 conference.</p>
+                </div>
+
+                <div class="publication-section citation-section">
+                    <h2>Citation</h2>
+                    <div class="citation-block">
+                        <p>
+                            Basu, S.K., Vedurada, J. (2025). GSOHC: Global Synchronization Optimization in Heterogeneous Computing. Proceedings of the European Conference on Object-Oriented Programming (ECOOP 2025), pp. 45-62.
+                        </p>
+                        <button class="btn copy-citation-btn">
+                            <i class="fas fa-copy"></i> Copy Citation
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <p>&copy; <span id="year"></span> All Rights Reserved</p>
+                </div>
+                <div class="footer-right">
+                    <a href="mailto:cs21resch11004@iith.ac.in">cs21resch11004@iith.ac.in</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="publication-detail.js"></script>
+    
+    <!-- Debug script to verify audio loading -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const audioElement = document.getElementById('summary-audio');
+            
+            if (audioElement) {
+                // Show audio element properties
+                console.log('Audio element found:', audioElement);
+                console.log('Audio source:', audioElement.querySelector('source').src);
+                
+                // Add error event listener
+                audioElement.addEventListener('error', function(e) {
+                    console.error('Audio error:', e);
+                    // Create debug info
+                    const debugDiv = document.createElement('div');
+                    debugDiv.className = 'audio-debug';
+                    debugDiv.style.display = 'block';
+                    debugDiv.innerHTML = `
+                        <p><strong>Audio Debug Info:</strong></p>
+                        <p>Error loading audio file: ${e.message || 'Unknown error'}</p>
+                        <p>Source attempted: ${audioElement.querySelector('source').src}</p>
+                        <p>Try checking file path and format compatibility.</p>
+                    `;
+                    
+                    // Insert after audio element
+                    audioElement.after(debugDiv);
+                }, true);
+            }
+        });
+    </script>
+</body>
+</html>
