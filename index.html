@@ -20,6 +20,7 @@
         <h1>${CONFIG.personal.name}</h1>
         <p class="name-local">${CONFIG.personal.nameLocal}</p>
         <p class="hero-meta">${CONFIG.personal.title} · ${CONFIG.personal.department}, ${CONFIG.personal.institution}</p>
+        ${formatSocialLinks()}
         <div class="hero-bio">
           ${CONFIG.about.bio.map(p => `<p>${p}</p>`).join("")}
         </div>

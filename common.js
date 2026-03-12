@@ -30,9 +30,9 @@ function renderFooter(isHome) {
   const year = CONFIG.footer.year || new Date().getFullYear();
   const text = CONFIG.footer.text.replace("©", `© ${year}`).replace(`© ${year} ${year}`, `© ${year}`);
 
-  const socialLinks = Object.entries(CONFIG.social)
+  const socialLinks = Object.entries(CONFIG.social || {})
     .filter(([, url]) => url)
-    .map(([key, url]) => `<a href="${url}" target="_blank" rel="noopener">${key}</a>`)
+    .map(([key, url]) => `<a href="${url}" target="_blank" rel="noopener">${SOCIAL_LABELS[key]||key}</a>`)
     .join("");
 
   const adminLink = isHome
@@ -43,11 +43,29 @@ function renderFooter(isHome) {
     <div class="footer-inner">
       <span class="nav-watermark footer-watermark">Buii</span>
       <span class="footer-text">${text}</span>
-      ${socialLinks ? `<div class="footer-social">${socialLinks}</div>` : ""}
       <a href="mailto:${CONFIG.personal.email}" class="footer-email">${CONFIG.personal.email}</a>
       ${adminLink}
     </div>
   `;
+}
+
+/* ── Social links ────────────────────────────────────────── */
+const SOCIAL_LABELS = {
+  github:   "GitHub",
+  scholar:  "Google Scholar",
+  linkedin: "LinkedIn",
+  twitter:  "Twitter / X",
+  dblp:     "DBLP",
+  orcid:    "ORCID",
+};
+
+function formatSocialLinks() {
+  const links = Object.entries(CONFIG.social || {})
+    .filter(([, url]) => url)
+    .map(([key, url]) =>
+      `<a href="${url}" target="_blank" rel="noopener" class="social-link">${SOCIAL_LABELS[key] || key}</a>`
+    ).join("");
+  return links ? `<div class="hero-social">${links}</div>` : "";
 }
 
 /* ── Authors ─────────────────────────────────────────────── */
