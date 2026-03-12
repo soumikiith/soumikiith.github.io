@@ -83,7 +83,13 @@ const CONFIG = {
       type:       "Conference Paper",
       coreRank:   "A",
       featured:   true,
-      awards: [],
+      awards: [
+        {
+          title: "Distinguished Paper Award",
+          body:  "ECOOP 2025",
+          year:  2025,
+        },
+      ],
       abstract: `The use of heterogeneous systems has become widespread and popular in the past decade with more than one type of processor, such as CPUs, GPUs, and FPGAs. A wide range of applications use both CPU and GPU to leverage the benefits of their unique features and strengths. Therefore, collaborative computation between CPU and GPU is essential to achieve high program performance. However, poorly placed global synchronization barriers and synchronous memory transfers are the main bottlenecks to enhanced program performance, preventing CPU and GPU computations from overlapping.
 
 Based on this observation, we propose a new optimization technique called hetero-sync motion that can relocate such barrier instructions to new locations, resulting in improved performance in CPU-GPU heterogeneous programs. Further, we propose GSOHC, a compiler analysis and optimization framework that automatically finds opportunities for hetero-sync motion in the input program and then performs code transformation to apply the optimization. Our static analysis is a context-sensitive, flow-sensitive inter-procedural data-flow analysis with three phases to identify the optimization opportunities precisely. We have implemented GSOHC using LLVM/Clang infrastructure. On A4000, P100 and A100 GPUs, our optimization achieves up to 1.8x, up to 1.9x and up to 1.9x speedups over baseline, respectively.`,

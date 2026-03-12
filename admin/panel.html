@@ -381,7 +381,12 @@ function switchTab(name) {
 
 /* ── Helpers ── */
 function esc(s) { return (s||"").replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
-function toggleCard(id) { document.getElementById(id)?.classList.toggle("open"); }
+function toggleCard(id) {
+  document.getElementById(id)?.classList.toggle("open");
+  // Re-render awards sub-list whenever a pub card is opened
+  const match = id.match(/^pub-card-(\d+)$/);
+  if (match) renderPubAwards(parseInt(match[1]));
+}
 
 /* ── Init ── */
 function init() {
