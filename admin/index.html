@@ -8,210 +8,181 @@
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono&display=swap');
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg: #faf9f7; --bg-alt: #f3f2ef; --border: #e2e1dc;
-      --text: #1c1c1a; --muted: #6b6b68; --faint: #c4c3be;
-      --red: #c0392b; --green: #2d7a4f; --amber: #92660a;
+      --bg: #faf9f7;
+      --border: #e2e1dc;
+      --text: #1c1c1a;
+      --muted: #6b6b68;
+      --faint: #f3f2ef;
+      --red: #c0392b;
       --ff: "DM Sans", system-ui, sans-serif;
       --mono: "DM Mono", monospace;
     }
-    html, body { height: 100%; font-family: var(--ff); background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
 
-    .wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
-    .box  { width: 100%; max-width: 380px; }
+    html, body {
+      height: 100%;
+      font-family: var(--ff);
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
 
-    .logo { font-size: .7rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 2.5rem; }
+    .wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
 
-    h1 { font-size: 1.45rem; font-weight: 400; letter-spacing: -.02em; margin-bottom: .4rem; }
-    .sub { font-size: .84rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.55; }
+    .box { width: 100%; max-width: 360px; }
+
+    .logo {
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 400;
+      letter-spacing: -.02em;
+      margin-bottom: .35rem;
+    }
+
+    .sub {
+      font-size: .84rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
 
     .field { margin-bottom: 1rem; }
-    .field label { display: block; font-size: .73rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-bottom: .4rem; }
+
+    .field label {
+      display: block;
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .4rem;
+    }
+
     .field input {
-      width: 100%; padding: .65rem .8rem;
-      font-family: var(--mono); font-size: .88rem; letter-spacing: .06em;
-      border: 1px solid var(--border); border-radius: 3px;
-      background: #fff; color: var(--text); outline: none;
+      width: 100%;
+      padding: .65rem .8rem;
+      font-family: var(--mono);
+      font-size: .9rem;
+      letter-spacing: .06em;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: #fff;
+      color: var(--text);
+      outline: none;
       transition: border-color .15s;
     }
     .field input:focus { border-color: var(--text); }
 
-    .strength-bar { height: 3px; border-radius: 2px; background: var(--border); margin-top: .45rem; overflow: hidden; }
-    .strength-fill { height: 100%; border-radius: 2px; width: 0; transition: width .2s, background .2s; }
-
     .btn {
-      width: 100%; padding: .7rem;
-      font-family: var(--ff); font-size: .86rem; font-weight: 500;
-      color: #fff; background: var(--text); border: none; border-radius: 3px;
-      cursor: pointer; margin-top: .25rem; transition: opacity .15s;
+      width: 100%;
+      padding: .7rem;
+      font-family: var(--ff);
+      font-size: .85rem;
+      font-weight: 500;
+      color: #fff;
+      background: var(--text);
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-top: .25rem;
+      transition: opacity .15s;
     }
     .btn:hover { opacity: .8; }
     .btn:disabled { opacity: .4; cursor: default; }
 
-    .msg { font-size: .82rem; margin-top: .85rem; display: none; }
-    .msg.show { display: block; }
-    .msg.error  { color: var(--red); }
-    .msg.success { color: var(--green); }
-
-    /* Security notice box */
-    .notice {
-      margin-top: 2rem; padding: 1rem 1.1rem;
-      background: #fffbf0; border: 1px solid #e8d48a; border-radius: 3px;
-      font-size: .78rem; color: var(--amber); line-height: 1.65;
+    .error {
+      font-size: .82rem;
+      color: var(--red);
+      margin-top: .85rem;
+      display: none;
     }
-    .notice strong { color: #7a5400; }
-    .notice code { font-family: var(--mono); font-size: .75rem; background: #f5eac0; padding: .1em .3em; border-radius: 2px; }
+    .error.show { display: block; }
 
-    /* Setup-specific */
-    .setup-steps { margin-bottom: 1.5rem; }
-    .step { display: flex; gap: .75rem; margin-bottom: .75rem; align-items: flex-start; }
-    .step-num {
-      width: 20px; height: 20px; flex-shrink: 0;
-      background: var(--text); color: #fff; border-radius: 50%;
-      font-size: .7rem; font-weight: 500; display: flex; align-items: center; justify-content: center;
-      margin-top: .1rem;
+    .hint {
+      margin-top: 2rem;
+      padding: .9rem 1rem;
+      background: var(--faint);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      font-size: .76rem;
+      color: var(--muted);
+      line-height: 1.65;
     }
-    .step-text { font-size: .83rem; color: var(--muted); line-height: 1.5; }
-    .step-text strong { color: var(--text); }
-
-    .divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+    .hint code {
+      font-family: var(--mono);
+      font-size: .74rem;
+      background: var(--border);
+      padding: .1em .35em;
+      border-radius: 2px;
+      color: var(--text);
+    }
   </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="box">
-    <div class="logo">Portfolio Admin</div>
-
-    <!-- ── LOGIN VIEW ── -->
-    <div id="view-login">
+  <div class="wrap">
+    <div class="box">
+      <div class="logo">Portfolio Admin</div>
       <h1>Sign in</h1>
       <p class="sub">Enter your admin password to access the dashboard.</p>
+
       <div class="field">
         <label>Password</label>
-        <input type="password" id="login-pw" autocomplete="current-password" />
-      </div>
-      <button class="btn" onclick="doLogin()">Sign in</button>
-      <p class="msg error" id="login-err">Incorrect password. Please try again.</p>
-    </div>
-
-    <!-- ── SETUP VIEW (first time) ── -->
-    <div id="view-setup" style="display:none">
-      <h1>Set your password</h1>
-      <p class="sub">No password is set yet. Create one to protect the admin panel.</p>
-
-      <div class="setup-steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-text"><strong>Your password is never stored in the repo.</strong> It is hashed (SHA-256) and saved only in this browser's local storage.</div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-text">To access admin from a new device or browser, open DevTools → Application → Local Storage → copy <code>portfolio_admin_hash</code> and paste it there manually.</div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-text">To reset: delete <code>portfolio_admin_hash</code> from Local Storage and reload this page.</div>
-        </div>
+        <input type="password" id="pw" placeholder="••••••••" autocomplete="current-password" />
       </div>
 
-      <div class="field">
-        <label>New Password</label>
-        <input type="password" id="setup-pw" oninput="checkStrength(this.value)" autocomplete="new-password" />
-        <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
-      </div>
-      <div class="field">
-        <label>Confirm Password</label>
-        <input type="password" id="setup-pw2" autocomplete="new-password" />
-      </div>
-      <button class="btn" onclick="doSetup()">Create password &amp; enter panel</button>
-      <p class="msg error"   id="setup-err"></p>
-      <p class="msg success" id="setup-ok"></p>
+      <button class="btn" id="btn" onclick="doLogin()">Sign in</button>
+      <p class="error" id="err">Incorrect password. Please try again.</p>
 
-      <div class="notice">
-        <strong>Security tip:</strong> Use a strong, unique password. Anyone with physical access to this browser can view Local Storage, so use a private/incognito window on shared computers.
+      <div class="hint">
+        Default password: <code>admin123</code><br/>
+        To change it, update <code>ADMIN_HASH</code> in <code>admin/auth.js</code>.
+        See the README for instructions.
       </div>
     </div>
-
   </div>
-</div>
 
-<script src="auth.js"></script>
-<script>
-  // Already logged in → jump to panel
-  if (isLoggedIn()) window.location.href = "panel.html";
+  <script src="auth.js"></script>
+  <script>
+    if (isLoggedIn()) window.location.href = "panel.html";
 
-  // Show correct view
-  if (hasPasswordSet()) {
-    document.getElementById("view-login").style.display = "";
-    document.getElementById("view-setup").style.display = "none";
-  } else {
-    document.getElementById("view-login").style.display = "none";
-    document.getElementById("view-setup").style.display = "";
-  }
+    document.getElementById("pw").addEventListener("keydown", e => {
+      if (e.key === "Enter") doLogin();
+    });
 
-  // Enter key on login
-  document.getElementById("login-pw")?.addEventListener("keydown", e => {
-    if (e.key === "Enter") doLogin();
-  });
+    async function doLogin() {
+      const pw  = document.getElementById("pw").value;
+      const btn = document.getElementById("btn");
+      const err = document.getElementById("err");
 
-  /* ── Login ── */
-  async function doLogin() {
-    const pw  = document.getElementById("login-pw").value;
-    const btn = document.querySelector("#view-login .btn");
-    const err = document.getElementById("login-err");
-    btn.disabled = true; btn.textContent = "Signing in…";
-    err.classList.remove("show");
+      btn.disabled = true;
+      btn.textContent = "Signing in…";
+      err.classList.remove("show");
 
-    const ok = await checkPassword(pw);
-    if (ok) {
-      setSession();
-      window.location.href = "panel.html";
-    } else {
-      err.classList.add("show");
-      btn.disabled = false; btn.textContent = "Sign in";
+      const ok = await checkPassword(pw);
+      if (ok) {
+        setSession();
+        window.location.href = "panel.html";
+      } else {
+        err.classList.add("show");
+        btn.disabled = false;
+        btn.textContent = "Sign in";
+      }
     }
-  }
-
-  /* ── Setup ── */
-  async function doSetup() {
-    const pw   = document.getElementById("setup-pw").value;
-    const pw2  = document.getElementById("setup-pw2").value;
-    const err  = document.getElementById("setup-err");
-    const ok   = document.getElementById("setup-ok");
-    const btn  = document.querySelector("#view-setup .btn");
-
-    err.classList.remove("show"); ok.classList.remove("show");
-
-    if (pw.length < 8) {
-      err.textContent = "Password must be at least 8 characters.";
-      err.classList.add("show"); return;
-    }
-    if (pw !== pw2) {
-      err.textContent = "Passwords do not match.";
-      err.classList.add("show"); return;
-    }
-
-    btn.disabled = true; btn.textContent = "Setting up…";
-    await setPassword(pw);
-    setSession();
-    ok.textContent = "Password set! Redirecting…";
-    ok.classList.add("show");
-    setTimeout(() => window.location.href = "panel.html", 800);
-  }
-
-  /* ── Strength meter ── */
-  function checkStrength(pw) {
-    const fill = document.getElementById("strength-fill");
-    let score = 0;
-    if (pw.length >= 8)  score++;
-    if (pw.length >= 12) score++;
-    if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) score++;
-    if (/[0-9]/.test(pw))  score++;
-    if (/[^A-Za-z0-9]/.test(pw)) score++;
-    const colors = ["#e74c3c","#e67e22","#f1c40f","#2ecc71","#27ae60"];
-    fill.style.width   = (score / 5 * 100) + "%";
-    fill.style.background = colors[Math.max(0, score - 1)] || colors[0];
-  }
-</script>
+  </script>
 </body>
 </html>
