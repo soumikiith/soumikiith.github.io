@@ -125,6 +125,21 @@
       }
     }
 
+    /* ── Awards ── */
+    const awardsHTML = pub.awards && pub.awards.length ? `
+      <div class="section">
+        <p class="section-label">Awards &amp; Recognition</p>
+        <ul class="award-list">
+          ${pub.awards.map(a => `
+            <li class="award-item">
+              <span class="award-icon">🏆</span>
+              <span class="award-name">${a.title}</span>
+              ${a.body ? `<span class="award-body">${a.body}</span>` : ""}
+              ${a.year ? `<span class="award-year">${a.year}</span>` : ""}
+            </li>`).join("")}
+        </ul>
+      </div>` : "";
+
     /* ── Citation ── */
     const citationHTML = pub.citation ? `
       <div class="section">
@@ -146,6 +161,8 @@
           <div class="pub-detail-meta">
             ${typeBadge(pub)}
             ${pub.coreRank ? `<span class="tag">CORE&nbsp;${pub.coreRank}</span>` : ""}
+            ${pub.awards && pub.awards.length ? pub.awards.map(a =>
+              `<span class="tag award-tag">🏆 ${a.title}</span>`).join("") : ""}
           </div>
         </div>
 
@@ -154,6 +171,8 @@
           <p class="section-label">Abstract</p>
           ${abstractHTML}
         </div>` : ""}
+
+        ${awardsHTML}
 
         ${resourceCards.length ? `
         <div class="section">

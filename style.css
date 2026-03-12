@@ -41,6 +41,12 @@ body {
   flex-direction: column;
 }
 
+p, .hero-bio p, .pub-abstract-section p {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
 /* ── Links ───────────────────────────────────────────────── */
 a {
   color: var(--link);
@@ -627,7 +633,37 @@ h1, h2, h3, h4 {
 .copy-btn:hover { color: var(--text); border-color: var(--text); }
 .copy-btn.copied { color: #2d7a4f; border-color: #2d7a4f; }
 
-/* Video embed */
+/* Award tag (inline badge) */
+.award-tag {
+  color: #7a5c00;
+  background: #fdf8ee;
+  border-color: #e8d89a;
+}
+
+/* Award list on detail page */
+.award-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  margin-top: .5rem;
+}
+.award-item {
+  display: flex;
+  align-items: baseline;
+  gap: .55rem;
+  font-size: .93rem;
+  flex-wrap: wrap;
+}
+.award-icon { font-size: .9rem; flex-shrink: 0; }
+.award-name { font-weight: 500; }
+.award-body { color: var(--muted); font-family: var(--ff-sans); font-size: .84rem; }
+.award-year {
+  font-family: var(--ff-mono);
+  font-size: .75rem;
+  color: var(--muted);
+  margin-left: auto;
+}
 .video-wrap {
   position: relative;
   width: 100%;

@@ -60,6 +60,7 @@
               <div class="pub-entry-meta">
                 <span style="font-style:italic">${pub.venue}</span>
                 ${typeBadge(pub)}
+                ${pub.awards && pub.awards.length ? pub.awards.map(a => `<span class="tag award-tag">🏆 ${a.title}</span>`).join("") : ""}
                 ${pub.resources?.pdf ? `<a href="${pub.resources.pdf}" class="pub-link" target="_blank" style="margin-left:.2rem">PDF</a>` : ""}
                 ${href ? `<a href="${href}" class="pub-link">Details</a>` : ""}
               </div>
