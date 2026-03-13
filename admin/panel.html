@@ -315,8 +315,7 @@
       <div class="section-title">Change Password</div>
       <div class="pw-box">
         <p style="font-size:.84rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6">
-          Your password hash is stored only in this browser's <code>localStorage</code> — it is never in the repo or any server.
-          To use the admin panel on another device, open DevTools → Application → Local Storage → copy <code>portfolio_admin_hash</code> to that device.
+          Your new password hash will be committed directly to <code>admin/auth.js</code> in your GitHub repo — no manual editing needed. Make sure your GitHub connection is configured in the <strong>GitHub / Publish</strong> tab first.
         </p>
         <div class="field" style="margin-bottom:.85rem">
           <label>Current Password</label>
@@ -331,7 +330,7 @@
           <label>Confirm New Password</label>
           <input type="password" id="pw-confirm" autocomplete="new-password" />
         </div>
-        <button class="btn btn-primary" onclick="changePassword()" style="width:auto">Update password</button>
+        <button class="btn btn-primary" onclick="changePassword()" style="width:auto" id="pw-btn">Update &amp; push to GitHub</button>
         <p class="pw-msg err" id="pw-err"></p>
         <p class="pw-msg ok"  id="pw-ok"></p>
       </div>
@@ -604,21 +603,21 @@ function renderPubAwards(i) {
     el.innerHTML = `<p style="font-size:.8rem;color:var(--muted);margin-bottom:.25rem">No awards yet.</p>`;
     return;
   }
-  el.innerHTML = awards.map((a,j)=>`
+  el.innerHTML = awards.map((a, j) => `
     <div class="award-row" style="margin-bottom:.5rem">
-      <input type="text" class="field input" value="${esc(a.title)}"
-        onchange="state.publications[${i}].awards[${j}].title=this.value"
+      <input type="text" value="${esc(a.title)}"
+        oninput="state.publications[${i}].awards[${j}].title=this.value"
         placeholder="Award title"
-        style="font-family:var(--ff);font-size:.85rem;padding:.45rem .7rem;border:1px solid var(--border);border-radius:3px;flex:1.5;outline:none"/>
-      <input type="text" value="${esc(a.body||'')}"
-        onchange="state.publications[${i}].awards[${j}].body=this.value"
+        style="font-family:var(--ff);font-size:.85rem;padding:.45rem .7rem;border:1px solid var(--border);border-radius:3px;flex:1.5;min-width:120px;outline:none"/>
+      <input type="text" value="${esc(a.body || '')}"
+        oninput="state.publications[${i}].awards[${j}].body=this.value"
         placeholder="Awarded by / venue"
-        style="font-family:var(--ff);font-size:.85rem;padding:.45rem .7rem;border:1px solid var(--border);border-radius:3px;flex:1;outline:none"/>
-      <input type="number" value="${a.year||''}"
-        onchange="state.publications[${i}].awards[${j}].year=parseInt(this.value)||null"
+        style="font-family:var(--ff);font-size:.85rem;padding:.45rem .7rem;border:1px solid var(--border);border-radius:3px;flex:1;min-width:100px;outline:none"/>
+      <input type="number" value="${a.year || ''}"
+        oninput="state.publications[${i}].awards[${j}].year=parseInt(this.value)||null"
         placeholder="Year"
         style="font-family:var(--ff);font-size:.85rem;padding:.45rem .7rem;border:1px solid var(--border);border-radius:3px;width:80px;outline:none"/>
-      <button class="btn btn-danger btn-sm" onclick="removePubAward(${i},${j})">✕</button>
+      <button class="btn btn-danger btn-sm" onclick="removePubAward(${i},${j})" title="Remove award">✕</button>
     </div>`).join("");
 }
 
@@ -876,23 +875,91 @@ function pwStrength(pw) {
   fill.style.background = ["#e74c3c","#e67e22","#f1c40f","#2ecc71","#27ae60"][Math.max(0,s-1)];
 }
 async function changePassword() {
-  const cur=document.getElementById("pw-current").value,
-        nw=document.getElementById("pw-new").value,
-        cf=document.getElementById("pw-confirm").value;
-  const err=document.getElementById("pw-err"), ok=document.getElementById("pw-ok");
+  const cur = document.getElementById("pw-current").value;
+  const nw  = document.getElementById("pw-new").value;
+  const cf  = document.getElementById("pw-confirm").value;
+  const err = document.getElementById("pw-err");
+  const ok  = document.getElementById("pw-ok");
+  const btn = document.getElementById("pw-btn");
   err.classList.remove("show"); ok.classList.remove("show");
 
-  if (!(await checkPassword(cur))) { err.textContent="Current password is incorrect."; err.classList.add("show"); return; }
-  if (nw.length<8) { err.textContent="New password must be at least 8 characters."; err.classList.add("show"); return; }
-  if (nw!==cf) { err.textContent="Passwords do not match."; err.classList.add("show"); return; }
+  // Validate
+  if (!(await checkPassword(cur))) {
+    err.textContent = "Current password is incorrect."; err.classList.add("show"); return;
+  }
+  if (nw.length < 8) {
+    err.textContent = "New password must be at least 8 characters."; err.classList.add("show"); return;
+  }
+  if (nw !== cf) {
+    err.textContent = "Passwords do not match."; err.classList.add("show"); return;
+  }
 
-  await setPassword(nw);
-  setSession(); // refresh session with new hash
-  ok.textContent="Password updated successfully."; ok.classList.add("show");
-  document.getElementById("pw-current").value="";
-  document.getElementById("pw-new").value="";
-  document.getElementById("pw-confirm").value="";
-  document.getElementById("pw-fill").style.width="0";
+  // Check GitHub is configured
+  const repo   = document.getElementById("gh-repo").value.trim()   || sessionStorage.getItem("gh_repo")   || "";
+  const token  = document.getElementById("gh-token").value.trim()  || sessionStorage.getItem("gh_token")  || "";
+  const branch = document.getElementById("gh-branch").value.trim() || sessionStorage.getItem("gh_branch") || "main";
+  if (!repo || !token) {
+    err.textContent = "GitHub not configured. Go to the GitHub / Publish tab and connect first.";
+    err.classList.add("show"); return;
+  }
+
+  btn.disabled = true; btn.textContent = "Pushing to GitHub…";
+
+  try {
+    // Generate new hash
+    const newHash = await hashPassword(nw);
+
+    // Fetch current auth.js from GitHub to get its SHA
+    const getRes = await fetch(`https://api.github.com/repos/${repo}/contents/admin/auth.js?ref=${branch}`, {
+      headers: { Authorization: `token ${token}`, Accept: "application/vnd.github.v3+json" }
+    });
+    if (!getRes.ok) throw new Error("Could not fetch admin/auth.js — check GitHub connection.");
+    const existing = await getRes.json();
+
+    // Decode current content, replace ADMIN_HASH line
+    const currentContent = decodeURIComponent(escape(atob(existing.content.replace(/\n/g,""))));
+    const updatedContent = currentContent.replace(
+      /const ADMIN_HASH = "[a-f0-9]{64}";/,
+      `const ADMIN_HASH = "${newHash}";`
+    );
+    if (updatedContent === currentContent) throw new Error("Could not find ADMIN_HASH in auth.js — file may be customised.");
+
+    // Commit updated auth.js
+    const putRes = await fetch(`https://api.github.com/repos/${repo}/contents/admin/auth.js`, {
+      method: "PUT",
+      headers: {
+        Authorization: `token ${token}`,
+        Accept: "application/vnd.github.v3+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: "Update admin password hash",
+        content: btoa(unescape(encodeURIComponent(updatedContent))),
+        sha:     existing.sha,
+        branch:  branch
+      })
+    });
+    if (!putRes.ok) {
+      const e = await putRes.json();
+      throw new Error(e.message);
+    }
+
+    // Update session so current tab stays logged in
+    setSession(newHash);
+
+    ok.textContent = "✓ Password updated and pushed to GitHub. Live in ~30 seconds.";
+    ok.classList.add("show");
+    document.getElementById("pw-current").value = "";
+    document.getElementById("pw-new").value = "";
+    document.getElementById("pw-confirm").value = "";
+    document.getElementById("pw-fill").style.width = "0";
+
+  } catch(e) {
+    err.textContent = "Failed: " + e.message;
+    err.classList.add("show");
+  }
+
+  btn.disabled = false; btn.textContent = "Update & push to GitHub";
 }
 
 /* ── Boot ── */
