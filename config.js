@@ -1,7 +1,7 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
- *  Last updated: 2026-03-13T16:44:14.988Z
+ *  Last updated: 2026-03-13T16:45:41.318Z
  * ============================================================
  */
 
@@ -170,7 +170,7 @@ const CONFIG = {
   "services": [],
   "cv": {
     "pdfPath": "Documents/My_Resume.pdf",
-    "embedPdf": true,
+    "embedPdf": false,
     "education": [],
     "experience": [],
     "awards": []
