@@ -110,6 +110,12 @@
     .add-btn:hover { background:#eef1f9; }
     .divider { border:none; border-top:1px solid var(--border); margin:1.25rem 0; }
 
+    /* Drag & drop reorder */
+    .drag-handle { cursor:grab; color:var(--faint); font-size:1rem; padding:0 .25rem; flex-shrink:0; user-select:none; }
+    .drag-handle:active { cursor:grabbing; }
+    .card.dragging { opacity:.4; border-style:dashed; }
+    .card.drag-over { border-color:var(--accent); background:#f0f4ff; }
+
     /* Award badge inside pub cards */
     .award-row { display:flex; gap:.5rem; align-items:center; margin-bottom:.4rem; flex-wrap:wrap; }
     .award-row input { flex:1; min-width:120px; }
@@ -448,21 +454,73 @@ function collectAll() {
 }
 
 /* ─────────────────────────────────────────────
+   DRAG & DROP ENGINE
+   Works on any .card-list container.
+   Call: initDrag(containerId, stateArray, rerenderFn)
+───────────────────────────────────────────── */
+function initDrag(containerId, arr, rerender) {
+  const list = document.getElementById(containerId);
+  if (!list) return;
+  let dragged = null;
+
+  list.querySelectorAll(".card").forEach(card => {
+    card.setAttribute("draggable", "true");
+
+    card.addEventListener("dragstart", e => {
+      dragged = card;
+      setTimeout(() => card.classList.add("dragging"), 0);
+      e.dataTransfer.effectAllowed = "move";
+    });
+    card.addEventListener("dragend", () => {
+      card.classList.remove("dragging");
+      list.querySelectorAll(".card").forEach(c => c.classList.remove("drag-over"));
+      dragged = null;
+    });
+    card.addEventListener("dragover", e => {
+      e.preventDefault();
+      if (card !== dragged) {
+        list.querySelectorAll(".card").forEach(c => c.classList.remove("drag-over"));
+        card.classList.add("drag-over");
+      }
+    });
+    card.addEventListener("dragleave", () => card.classList.remove("drag-over"));
+    card.addEventListener("drop", e => {
+      e.preventDefault();
+      card.classList.remove("drag-over");
+      if (!dragged || dragged === card) return;
+
+      // Find indexes
+      const cards  = [...list.querySelectorAll(".card")];
+      const fromIdx = cards.indexOf(dragged);
+      const toIdx   = cards.indexOf(card);
+      if (fromIdx === -1 || toIdx === -1) return;
+
+      // Reorder state array
+      const [moved] = arr.splice(fromIdx, 1);
+      arr.splice(toIdx, 0, moved);
+      rerender();
+    });
+  });
+}
+
+/* ─────────────────────────────────────────────
    BIO
 ───────────────────────────────────────────── */
 function renderBio() {
   document.getElementById("bio-list").innerHTML = (state.about.bio||[]).map((text,i)=>`
     <div class="card" id="bio-${i}">
       <div class="card-header" onclick="toggleCard('bio-${i}')">
+        <span class="drag-handle" onclick="event.stopPropagation()" title="Drag to reorder">⠿</span>
         <span class="card-title" style="font-weight:400;color:var(--muted)">${text.replace(/<[^>]+>/g,"").substring(0,90)}…</span>
         <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();removeBio(${i})">Remove</button>
         <span class="card-chevron">▼</span>
       </div>
       <div class="card-body">
         <div class="field"><label>Paragraph (HTML allowed)</label>
-        <textarea rows="3" onchange="state.about.bio[${i}]=this.value">${esc(text)}</textarea></div>
+        <textarea rows="3" oninput="state.about.bio[${i}]=this.value">${esc(text)}</textarea></div>
       </div>
     </div>`).join("");
+  initDrag("bio-list", state.about.bio, renderBio);
 }
 function addBio() { state.about.bio.push("New paragraph."); renderBio(); }
 function removeBio(i) { state.about.bio.splice(i,1); renderBio(); }
@@ -506,17 +564,19 @@ function renderNews() {
   document.getElementById("news-list").innerHTML = (state.news||[]).map((n,i)=>`
     <div class="card" id="news-${i}">
       <div class="card-header" onclick="toggleCard('news-${i}')">
+        <span class="drag-handle" onclick="event.stopPropagation()" title="Drag to reorder">⠿</span>
         <span class="card-title" style="font-weight:400">${esc(n.date)} — ${esc(n.text).substring(0,60)}</span>
         <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();removeNews(${i})">Remove</button>
         <span class="card-chevron">▼</span>
       </div>
       <div class="card-body"><div class="form-grid">
-        <div class="field"><label>Date</label><input type="text" value="${esc(n.date)}" onchange="state.news[${i}].date=this.value"/></div>
-        <div class="field full"><label>Text</label><input type="text" value="${esc(n.text)}" onchange="state.news[${i}].text=this.value"/></div>
-        <div class="field"><label>Link URL</label><input type="text" value="${esc(n.link||'')}" onchange="state.news[${i}].link=this.value||null"/></div>
-        <div class="field"><label>Link Text</label><input type="text" value="${esc(n.linkText||'Read more →')}" onchange="state.news[${i}].linkText=this.value"/></div>
+        <div class="field"><label>Date</label><input type="text" value="${esc(n.date)}" oninput="state.news[${i}].date=this.value"/></div>
+        <div class="field full"><label>Text</label><input type="text" value="${esc(n.text)}" oninput="state.news[${i}].text=this.value"/></div>
+        <div class="field"><label>Link URL</label><input type="text" value="${esc(n.link||'')}" oninput="state.news[${i}].link=this.value||null"/></div>
+        <div class="field"><label>Link Text</label><input type="text" value="${esc(n.linkText||'Read more →')}" oninput="state.news[${i}].linkText=this.value"/></div>
       </div></div>
     </div>`).join("");
+  initDrag("news-list", state.news, renderNews);
 }
 function addNews() {
   state.news.push({date:"Month YYYY",text:"News item.",link:null,linkText:"Read more →"});
@@ -531,6 +591,7 @@ function renderPublications() {
   document.getElementById("pub-list").innerHTML = (state.publications||[]).map((pub,i)=>`
     <div class="card" id="pub-${i}">
       <div class="card-header" onclick="toggleCard('pub-${i}')">
+        <span class="drag-handle" onclick="event.stopPropagation()" title="Drag to reorder">⠿</span>
         <div style="flex:1">
           <div class="card-title">${esc(pub.title)}</div>
           <div class="card-meta">${esc(pub.venueShort||pub.venue||'')} · ${pub.year||''}</div>
@@ -593,6 +654,7 @@ function renderPublications() {
 
   // Render awards sub-lists
   state.publications.forEach((pub,i) => renderPubAwards(i));
+  initDrag("pub-list", state.publications, renderPublications);
 }
 
 function renderPubAwards(i) {
