@@ -1,7 +1,7 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
- *  Last updated: 2026-03-13T16:38:50.770Z
+ *  Last updated: 2026-03-13T16:44:14.988Z
  * ============================================================
  */
 
@@ -80,6 +80,26 @@ const CONFIG = {
   ],
   "publications": [
     {
+      "id": "streamalloc",
+      "title": "StreamAlloc: A Framework for Analyzing and Transforming CUDA Code to Enable Asynchronous Execution",
+      "authors": [
+        {
+          "name": "Soumik Kumar Basu",
+          "self": true
+        },
+        {
+          "name": "Jyothi Vedurada"
+        }
+      ],
+      "venue": "ACM Transactions on Programming Languages and Systems",
+      "venueShort": "ACM TOPLAS",
+      "year": 2026,
+      "type": "Journal Article",
+      "featured": true,
+      "awards": [],
+      "detail": false
+    },
+    {
       "id": "gsohc",
       "title": "GSOHC: Global Synchronization Optimization in Heterogeneous Computing",
       "authors": [
@@ -127,26 +147,6 @@ const CONFIG = {
       "detail": true
     },
     {
-      "id": "streamalloc",
-      "title": "StreamAlloc: A Framework for Analyzing and Transforming CUDA Code to Enable Asynchronous Execution",
-      "authors": [
-        {
-          "name": "Soumik Kumar Basu",
-          "self": true
-        },
-        {
-          "name": "Jyothi Vedurada"
-        }
-      ],
-      "venue": "ACM Transactions on Programming Languages and Systems",
-      "venueShort": "ACM TOPLAS",
-      "year": 2026,
-      "type": "Journal Article",
-      "featured": true,
-      "awards": [],
-      "detail": false
-    },
-    {
       "id": "patent-streamalloc",
       "title": "Method and System for Automatic CUDA Stream Allocation using Static Analysis",
       "authors": [
@@ -169,8 +169,8 @@ const CONFIG = {
   "teaching": [],
   "services": [],
   "cv": {
-    "pdfPath": null,
-    "embedPdf": false,
+    "pdfPath": "Documents/My_Resume.pdf",
+    "embedPdf": true,
     "education": [],
     "experience": [],
     "awards": []
