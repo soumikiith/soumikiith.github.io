@@ -1,7 +1,7 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
- *  Last updated: 2026-03-12T04:39:05.161Z
+ *  Last updated: 2026-03-13T16:38:50.770Z
  * ============================================================
  */
 
@@ -65,6 +65,12 @@ const CONFIG = {
     ]
   },
   "news": [
+    {
+      "date": "July 2025",
+      "text": "ECOOP Distinguished Artifact Award for GSOHC",
+      "link": null,
+      "linkText": "Read more →"
+    },
     {
       "date": "April 2025",
       "text": "Paper accepted at ECOOP 2025.",
