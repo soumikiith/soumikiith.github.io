@@ -18,7 +18,7 @@
 
 // SHA-256 hash of the admin password.
 // Default is "admin123" — replace with your own hash before deploying.
-const ADMIN_HASH = "3babe351d12c0716b9ab5af1a8ea51332741fbe27bffa3d5b8e3ffd8b334903e";
+const ADMIN_HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
 
 const SESSION_KEY = "portfolio_admin_session";
 const EXPIRES_KEY = "portfolio_admin_expires";

@@ -324,6 +324,20 @@ h1, h2, h3, h4 {
 }
 .news-text a:hover { color: var(--text); border-color: var(--text); }
 
+.news-toggle-btn {
+  font-family: var(--ff-sans);
+  font-size: .78rem;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: .6rem 0 0;
+  display: inline-block;
+  text-decoration: none;
+  transition: color .15s;
+}
+.news-toggle-btn:hover { color: var(--text); text-decoration: none; }
+
 /* ── Home publication cards ─────────────────────────────── */
 .pub-card-list { list-style: none; }
 .pub-card {

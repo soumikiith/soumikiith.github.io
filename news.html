@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>News</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="config.js" defer></script>
+  <script src="common.js" defer></script>
+  <script defer>
+  document.addEventListener("DOMContentLoaded", () => {
+    initPage("news.html");
+    document.title = `News · ${CONFIG.personal.name}`;
+
+    const container = document.getElementById("all-news");
+
+    if (!CONFIG.news || CONFIG.news.length === 0) {
+      container.innerHTML = `<p class="empty-state">No news items yet.</p>`;
+      return;
+    }
+
+    container.innerHTML = `<ul class="news-list">
+      ${CONFIG.news.map(n => `
+        <li class="news-item">
+          <span class="news-date">${n.date}</span>
+          <span class="news-text">
+            ${n.text}
+            ${n.link ? `<a href="${n.link}">${n.linkText || "Read more →"}</a>` : ""}
+          </span>
+        </li>`).join("")}
+    </ul>`;
+  });
+  </script>
+</head>
+<body>
+
+<header style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-nav"></div>
+</header>
+
+<main class="page-wrap">
+  <div class="pub-page-header">
+    <h1>News</h1>
+  </div>
+  <div id="all-news" style="margin-top:1.5rem"></div>
+</main>
+
+<footer style="max-width:720px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2rem)">
+  <div id="site-footer"></div>
+</footer>
+
+</body>
+</html>

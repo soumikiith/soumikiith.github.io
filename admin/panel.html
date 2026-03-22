@@ -219,6 +219,14 @@
     <!-- ═══ NEWS ═══════════════════════════════════════ -->
     <div class="tab-panel" id="tab-news">
       <div class="section-title">Latest News</div>
+      <div class="form-grid" style="margin-bottom:1.5rem">
+        <div class="field">
+          <label>Items shown on homepage</label>
+          <input type="number" id="news-limit" min="1" max="50"
+            oninput="state.newsLimit=parseInt(this.value)||5" />
+          <span class="hint">Older items collapse behind a "Show all" button</span>
+        </div>
+      </div>
       <div id="news-list" class="card-list"></div>
       <button class="add-btn" onclick="addNews()">+ Add news item</button>
     </div>
@@ -414,6 +422,9 @@ function init() {
   setVal("gh-branch", sessionStorage.getItem("gh_branch") || "main");
   setVal("gh-path",   sessionStorage.getItem("gh_path")   || "config.js");
 
+  // News limit
+  setVal("news-limit", state.newsLimit || 5);
+
   renderAll();
 }
 function setVal(id, v) { const el = document.getElementById(id); if (el) el.value = v; }
@@ -442,6 +453,7 @@ function collectAll() {
 
   state.cv.pdfPath  = document.getElementById("cv-pdfPath").value.trim() || null;
   state.cv.embedPdf = document.getElementById("cv-embedPdf").checked;
+  state.newsLimit   = parseInt(document.getElementById("news-limit")?.value) || 5;
 
   // Parse author strings
   state.publications.forEach((pub, i) => {

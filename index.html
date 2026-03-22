@@ -33,20 +33,28 @@
 
     /* ── News ── */
     const newsList = document.getElementById("news-list");
+    const limit    = CONFIG.newsLimit || 5;
+
     if (CONFIG.news.length === 0) {
       newsList.innerHTML = `<p class="empty-state">No recent news.</p>`;
     } else {
-      newsList.innerHTML = `<ul class="news-list">
-        ${CONFIG.news.map(n => `
-          <li class="news-item">
-            <span class="news-date">${n.date}</span>
-            <span class="news-text">
-              ${n.text}
-              ${n.link ? `<a href="${n.link}">${n.linkText || "Read more →"}</a>` : ""}
-            </span>
-          </li>
-        `).join("")}
-      </ul>`;
+      const visible  = CONFIG.news.slice(0, limit);
+      const hasMore  = CONFIG.news.length > limit;
+      newsList.innerHTML = `
+        <ul class="news-list">
+          ${visible.map(n => `
+            <li class="news-item">
+              <span class="news-date">${n.date}</span>
+              <span class="news-text">
+                ${n.text}
+                ${n.link ? `<a href="${n.link}">${n.linkText || "Read more →"}</a>` : ""}
+              </span>
+            </li>`).join("")}
+        </ul>
+        ${hasMore ? `
+          <a href="news.html" class="news-toggle-btn">
+            View all ${CONFIG.news.length} news items →
+          </a>` : ""}`;
     }
 
     /* ── Featured publications ── */
