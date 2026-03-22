@@ -1,175 +1,208 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
+ *  Last updated: 2026-03-22T15:40:38.469Z
  * ============================================================
  */
 
 const CONFIG = {
-
-  /* ── Personal ─────────────────────────────────────────── */
-  personal: {
-    name:        "Soumik Kumar Basu",
-    nameLocal:   "সৌমিক কুমার বসু",
-    title:       "PhD Student",
-    institution: "IIT Hyderabad",
-    department:  "Department of Computer Science & Engineering",
-    email:       "cs21resch11004@iith.ac.in",
-    photo:       "Documents/profile.jpg",
-    photoAlt:    "Soumik Kumar Basu",
+  "personal": {
+    "name": "Soumik Kumar Basu",
+    "nameLocal": "সৌমিক কুমার বসু",
+    "title": "PhD Student",
+    "institution": "IIT Hyderabad",
+    "department": "Department of Computer Science & Engineering",
+    "email": "cs21resch11004@iith.ac.in",
+    "photo": "Documents/profile.jpg",
+    "photoAlt": "Soumik Kumar Basu"
   },
-
-  /* ── Social / Links ───────────────────────────────────── */
-  social: {
-    github:   null,
-    scholar:  null,
-    linkedin: null,
-    twitter:  null,
-    dblp:     null,
-    orcid:    null,
+  "social": {
+    "github": null,
+    "scholar": null,
+    "linkedin": null,
+    "twitter": null,
+    "dblp": null,
+    "orcid": null
   },
-
-  /* ── Navigation ───────────────────────────────────────── */
-  nav: [
-    { label: "Home",         href: "index.html"        },
-    { label: "Publications", href: "publications.html" },
-    { label: "News",         href: "news.html"         },
-    { label: "Teaching",     href: "teaching.html"     },
-    { label: "Services",     href: "services.html"     },
-    { label: "CV",           href: "cv.html"           },
+  "nav": [
+    {
+      "label": "Home",
+      "href": "index.html"
+    },
+    {
+      "label": "Publications",
+      "href": "publications.html"
+    },
+    {
+      "label": "Teaching",
+      "href": "teaching.html"
+    },
+    {
+      "label": "Services",
+      "href": "services.html"
+    },
+    {
+      "label": "CV",
+      "href": "cv.html"
+    }
   ],
-
-  /* ── About Me ─────────────────────────────────────────── */
-  about: {
-    bio: [
+  "about": {
+    "bio": [
       "I'm a PhD student at IIT Hyderabad working in the exciting world of Programming Languages. My research focuses on compile-time optimization techniques to make GPU programs significantly faster.",
       "I'm fortunate to be advised by <strong>Dr. Jyothi Vedurada</strong>. A big shoutout to <strong>Prof. Surojit Bhattacharyya</strong> and <strong>Prof. Sumit Majumdar</strong> from MCKVIE, who ignited my passion for PL and C++.",
-      "Always up for interesting collaborations or brainstorming over chai — whether you're working on something revolutionary or just want to chat about research, drop me a message.",
+      "Always up for interesting collaborations or brainstorming over chai — whether you're working on something revolutionary or just want to chat about research, drop me a message."
     ],
-    interests: [
+    "interests": [
       "Compiler Optimizations",
       "Program Analysis",
-      "CPU-GPU Systems",
+      "CPU-GPU Systems"
     ],
-    hobbies: [
+    "hobbies": [
       "Reading books (fighting my tendency toward tsundoku)",
       "Heart-to-heart conversations with my favourite person(s)",
       "Exploring Hyderabad with friends",
-      "Culinary adventures around campus — I eat anything 🍔",
-    ],
+      "Culinary adventures around campus — I eat anything 🍔"
+    ]
   },
-
-  /* ── News ─────────────────────────────────────────────── */
-  // How many news items to show on the homepage before collapsing
-  newsLimit: 5,
-
-  news: [
+  "news": [
     {
-      date:     "April 2025",
-      text:     "Paper accepted at ECOOP 2025.",
-      link:     "publication.html?id=gsohc",
-      linkText: "Read more →",
+      "date": "March 2026",
+      "text": "Outr paper, StreamAlloc accepted to be presented at PLDI 2026",
+      "link": null,
+      "linkText": ""
     },
-  ],
-
-  /* ── Publications ─────────────────────────────────────── */
-  publications: [
     {
-      id:      "gsohc",
-      title:   "GSOHC: Global Synchronization Optimization in Heterogeneous Computing",
-      authors: [
-        { name: "Soumik Kumar Basu", self: true },
-        { name: "Jyothi Vedurada" },
-      ],
-      venue:      "European Conference on Object-Oriented Programming (ECOOP)",
-      venueShort: "ECOOP 2025",
-      dates:      "30 Jun – 4 Jul, 2025",
-      year:       2025,
-      type:       "Conference Paper",
-      coreRank:   "A",
-      featured:   true,
-      awards: [
+      "date": "January 2026",
+      "text": "Our Paper, StreamAlloc accpeted in ACM TOPLAS.",
+      "link": null,
+      "linkText": ""
+    },
+    {
+      "date": "July 2025",
+      "text": "ECOOP Distinguished Artifact Award for GSOHC",
+      "link": null,
+      "linkText": "Read more →"
+    },
+    {
+      "date": "April 2025",
+      "text": "Paper accepted at ECOOP 2025.",
+      "link": "publication.html?id=gsohc",
+      "linkText": "Read more →"
+    }
+  ],
+  "publications": [
+    {
+      "id": "streamalloc",
+      "title": "StreamAlloc: A Framework for Analyzing and Transforming CUDA Code to Enable Asynchronous Execution",
+      "authors": [
         {
-          title: "Distinguished Paper Award",
-          body:  "ECOOP 2025",
-          year:  2025,
+          "name": "Soumik Kumar Basu",
+          "self": true
         },
+        {
+          "name": "Jyothi Vedurada"
+        }
       ],
-      abstract: `The use of heterogeneous systems has become widespread and popular in the past decade with more than one type of processor, such as CPUs, GPUs, and FPGAs. A wide range of applications use both CPU and GPU to leverage the benefits of their unique features and strengths. Therefore, collaborative computation between CPU and GPU is essential to achieve high program performance. However, poorly placed global synchronization barriers and synchronous memory transfers are the main bottlenecks to enhanced program performance, preventing CPU and GPU computations from overlapping.
-
-Based on this observation, we propose a new optimization technique called hetero-sync motion that can relocate such barrier instructions to new locations, resulting in improved performance in CPU-GPU heterogeneous programs. Further, we propose GSOHC, a compiler analysis and optimization framework that automatically finds opportunities for hetero-sync motion in the input program and then performs code transformation to apply the optimization. Our static analysis is a context-sensitive, flow-sensitive inter-procedural data-flow analysis with three phases to identify the optimization opportunities precisely. We have implemented GSOHC using LLVM/Clang infrastructure. On A4000, P100 and A100 GPUs, our optimization achieves up to 1.8x, up to 1.9x and up to 1.9x speedups over baseline, respectively.`,
-      resources: {
-        pdf:      "Publications/gsohc/GSOHC_ECOOP_2025.pdf",
-        artifact: {
-          url:       "https://doi.org/10.5281/zenodo.15302892",
-          badge:     "Functional / Reusable",
-          available: true,
+      "venue": "ACM Transactions on Programming Languages and Systems",
+      "venueShort": "ACM TOPLAS",
+      "year": 2026,
+      "type": "Journal Article",
+      "featured": true,
+      "awards": [],
+      "detail": false
+    },
+    {
+      "id": "gsohc",
+      "title": "GSOHC: Global Synchronization Optimization in Heterogeneous Computing",
+      "authors": [
+        {
+          "name": "Soumik Kumar Basu",
+          "self": true
         },
-        audio:  "Publications/gsohc/summary.mp3",      // repo-relative path, or null
-        video:  null,                                   // .pdf, .mp4, or .webm path in repo; or null
-        slides: null,                                   // repo-relative PDF path, or null
-        code:   null,
+        {
+          "name": "Jyothi Vedurada"
+        }
+      ],
+      "venue": "European Conference on Object-Oriented Programming (ECOOP)",
+      "venueShort": "ECOOP 2025",
+      "dates": "30 Jun – 4 Jul, 2025",
+      "year": 2025,
+      "type": "Conference Paper",
+      "coreRank": "A",
+      "featured": true,
+      "awards": [
+        {
+          "title": "Distinguished Artifact Award",
+          "body": "ECOOP",
+          "year": 2025
+        },
+        {
+          "title": "Best Presentation Award",
+          "body": "IndoSys",
+          "year": 2025
+        }
+      ],
+      "abstract": "The use of heterogeneous systems has become widespread and popular in the past decade with more than one type of processor, such as CPUs, GPUs, and FPGAs. A wide range of applications use both CPU and GPU to leverage the benefits of their unique features and strengths. Therefore, collaborative computation between CPU and GPU is essential to achieve high program performance. However, poorly placed global synchronization barriers and synchronous memory transfers are the main bottlenecks to enhanced program performance, preventing CPU and GPU computations from overlapping.\n\nBased on this observation, we propose a new optimization technique called hetero-sync motion that can relocate such barrier instructions to new locations, resulting in improved performance in CPU-GPU heterogeneous programs. Further, we propose GSOHC, a compiler analysis and optimization framework that automatically finds opportunities for hetero-sync motion in the input program and then performs code transformation to apply the optimization. Our static analysis is a context-sensitive, flow-sensitive inter-procedural data-flow analysis with three phases to identify the optimization opportunities precisely. We have implemented GSOHC using LLVM/Clang infrastructure. On A4000, P100 and A100 GPUs, our optimization achieves up to 1.8x, up to 1.9x and up to 1.9x speedups over baseline, respectively.",
+      "resources": {
+        "pdf": "Publications/gsohc/GSOHC_ECOOP_2025.pdf",
+        "artifact": {
+          "url": "https://doi.org/10.5281/zenodo.15302892",
+          "badge": "Functional / Reusable",
+          "available": true
+        },
+        "audio": "Publications/gsohc/gsohc-summary.wav",
+        "video": null,
+        "slides": null,
+        "code": null
       },
-      citation: `Basu, S.K., Vedurada, J. (2025). GSOHC: Global Synchronization Optimization in Heterogeneous Computing. Proceedings of the European Conference on Object-Oriented Programming (ECOOP 2025), pp. 45-62.`,
-      detail: true,
+      "citation": "Basu, S.K., Vedurada, J. (2025). GSOHC: Global Synchronization Optimization in Heterogeneous Computing. Proceedings of the European Conference on Object-Oriented Programming (ECOOP 2025), pp. 45-62.",
+      "detail": true
     },
     {
-      id:      "streamalloc",
-      title:   "StreamAlloc: A Framework for Analyzing and Transforming CUDA Code to Enable Asynchronous Execution",
-      authors: [
-        { name: "Soumik Kumar Basu", self: true },
-        { name: "Jyothi Vedurada" },
+      "id": "patent-streamalloc",
+      "title": "Method and System for Automatic CUDA Stream Allocation using Static Analysis",
+      "authors": [
+        {
+          "name": "Soumik Kumar Basu",
+          "self": true
+        },
+        {
+          "name": "Jyothi Vedurada"
+        }
       ],
-      venue:      "ACM Transactions on Programming Languages and Systems",
-      venueShort: "ACM TOPLAS",
-      year:       2026,
-      type:       "Journal Article",
-      featured:   true,
-      awards:     [],
-      detail:     false,
-    },
-    {
-      id:      "patent-streamalloc",
-      title:   "Method and System for Automatic CUDA Stream Allocation using Static Analysis",
-      authors: [
-        { name: "Soumik Kumar Basu", self: true },
-        { name: "Jyothi Vedurada" },
-      ],
-      venue:      "Patent (IN)",
-      venueShort: "Patent",
-      year:       2025,
-      type:       "Patent",
-      awards:     [],
-      detail:     false,
-    },
+      "venue": "Patent (IN)",
+      "venueShort": "Patent",
+      "year": 2025,
+      "type": "Patent",
+      "awards": [],
+      "detail": false
+    }
   ],
-
-  /* ── Teaching ─────────────────────────────────────────── */
-  teaching: [],
-
-  /* ── Services ─────────────────────────────────────────── */
-  services: [
-    // {
-    //   role:        "Reviewer",
-    //   venue:       "PLDI 2025",
-    //   venueFull:   "ACM SIGPLAN Conference on Programming Language Design and Implementation",
-    //   year:        2025,
-    //   type:        "Review",
-    //   description: null,
-    // },
-  ],
-
-  /* ── CV ───────────────────────────────────────────────── */
-  cv: {
-    pdfPath:  null,
-    embedPdf: false,
-    education: [],
-    experience: [],
-    awards: [],
+  "teaching": [],
+  "services": [],
+  "cv": {
+    "pdfPath": "Documents/My_Resume.pdf",
+    "embedPdf": false,
+    "education": [
+      {
+        "degree": "PhD",
+        "institution": "IIT Hyderabad",
+        "period": "Jul 2021 - ",
+        "details": "Computer Science and Engineering"
+      },
+      {
+        "degree": "BTech",
+        "institution": "MCKV Institute of Engineering",
+        "period": "Jul 2017 - Jul 2021",
+        "details": "Computer Science and Engineering"
+      }
+    ],
+    "experience": [],
+    "awards": []
   },
-
-  /* ── Footer ───────────────────────────────────────────── */
-  footer: {
-    text: "© Soumik Kumar Basu. All rights reserved.",
-    year: null,
+  "footer": {
+    "text": "© Soumik Kumar Basu. All rights reserved.",
+    "year": null
   },
+  "newsLimit": 2
 };
