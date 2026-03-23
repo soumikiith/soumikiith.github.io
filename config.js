@@ -1,7 +1,7 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
- *  Last updated: 2026-03-23T14:05:59.703Z
+ *  Last updated: 2026-03-23T14:09:24.192Z
  * ============================================================
  */
 
@@ -19,7 +19,7 @@ const CONFIG = {
   "social": {
     "github": null,
     "scholar": null,
-    "linkedin": null,
+    "linkedin": "https://www.linkedin.com/in/soumik-kumar-basu-31b008194/",
     "twitter": null,
     "dblp": null,
     "orcid": null
