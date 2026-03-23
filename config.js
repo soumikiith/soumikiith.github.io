@@ -1,7 +1,7 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
- *  Last updated: 2026-03-22T15:40:38.469Z
+ *  Last updated: 2026-03-23T14:03:59.486Z
  * ============================================================
  */
 
@@ -103,7 +103,7 @@ const CONFIG = {
           "name": "Jyothi Vedurada"
         }
       ],
-      "venue": "ACM Transactions on Programming Languages and Systems",
+      "venue": "ACM Transactions on Programming Languages and Systems (TOPLAS)",
       "venueShort": "ACM TOPLAS",
       "year": 2026,
       "type": "Journal Article",
@@ -179,7 +179,16 @@ const CONFIG = {
     }
   ],
   "teaching": [],
-  "services": [],
+  "services": [
+    {
+      "role": "Artifact Evaluation Committee Member",
+      "type": "Review",
+      "venue": "PPoPP",
+      "venueFull": "ACM SIGPLAN Symposium on Principles and Practice of Parallel Programming",
+      "year": 2023,
+      "description": null
+    }
+  ],
   "cv": {
     "pdfPath": "Documents/My_Resume.pdf",
     "embedPdf": false,
