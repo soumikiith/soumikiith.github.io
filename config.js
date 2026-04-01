@@ -1,7 +1,7 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
- *  Last updated: 2026-04-01T07:02:23.770Z
+ *  Last updated: 2026-04-01T07:03:48.356Z
  * ============================================================
  */
 
@@ -184,55 +184,55 @@ const CONFIG = {
     {
       "course": "Computer Architecture (CS2323)",
       "role": "Teaching Assistant",
-      "term": "October' 21 - December' 21",
+      "term": "October 2021 - December 2021",
       "institution": "IIT Hyderabad"
     },
     {
       "course": "Operating Systems (CS3523)",
       "role": "Teaching Assistant",
-      "term": "January' 2022 - June' 2022",
+      "term": "January 2022 - June 2022",
       "institution": "IIT Hyderabad"
     },
     {
       "course": "Software Engineering (CS4443)",
       "role": "Teaching Assistant",
-      "term": "January' 2023 - June 2023",
+      "term": "January 2023 - June 2023",
       "institution": "IIT Hyderabad"
     },
     {
       "course": "Compilers II (CS3423)",
       "role": "Teaching Assistant",
-      "term": "August' 2023 - December' 2023",
+      "term": "August 2023 - December 2023",
       "institution": "IIT Hyderabad"
     },
     {
       "course": "Introduction to Program Analysis and Optimization (CS5863)",
       "role": "Teaching Assistant",
-      "term": "January' 2024 - June' 2024",
+      "term": "January 2024 - June 2024",
       "institution": "IIT Hyderabad"
     },
     {
       "course": "Introduction to Program Analysis and Optimization (CS5863):",
       "role": "Teaching Assistant",
-      "term": "January' 2025 - June' 2025",
+      "term": "January 2025 - June 2025",
       "institution": "IIT Hyderabad"
     },
     {
       "course": "Introduction to Program Analysis and Optimization (CS5863):",
       "role": "Teaching Assistant",
-      "term": "January' 2026 - June' 2026",
+      "term": "January 2026 - June 2026",
       "institution": "IIT Hyderabad"
     },
     {
       "course": "Introduction to Programming (ID1063)",
       "role": "Teaching Assistant",
-      "term": "August' 2024 - Decemeber' 2024",
+      "term": "August 2024 - Decemeber 2024",
       "institution": "IIT Hyderabad"
     },
     {
       "course": "GPU Programming (CS5013)",
       "role": "Teaching Assistant",
-      "term": "August' 2025 - December' 2025",
+      "term": "August 2025 - December 2025",
       "institution": "IIT Hyderabad"
     }
   ],
