@@ -1,7 +1,7 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
- *  Last updated: 2026-03-25T16:16:23.255Z
+ *  Last updated: 2026-04-01T06:44:18.485Z
  * ============================================================
  */
 
@@ -109,7 +109,9 @@ const CONFIG = {
       "type": "Journal Article",
       "featured": true,
       "awards": [],
-      "detail": false
+      "detail": true,
+      "abstract": "In the CUDA programming model, data transfers on the default stream are synchronous, and, similarly, device kernels launched on the default stream cannot overlap with other kernel computations and data transfers. Overlapping execution can be enabled using asynchronous APIs and streams in CUDA. Using them, however, requires careful handling of data dependencies across multiple data-transfer calls, host operations, and kernel computations to ensure program correctness. Moreover, numerous data transfer calls and kernel calls in a program make it even more challenging to manually assign the appropriate stream identifier for each such call. This challenge remains daunting for non-expert programmers because they lack the right tools and expertise.\n\nTo address this, we propose sync2async, a novel optimization technique that transforms synchronous data transfers and kernel launches into non-default-stream asynchronous calls by allocating stream identifiers (and adding stream synchronizations at appropriate places) to maximize parallelizability while preserving dependencies. To identify sync2async opportunities and apply transformations, we introduce StreamAlloc, a data-flow-analysis-based framework with four components: (1) inter-procedural compositional read-write analysis to identify variables read and written at call sites, (2) intra-procedural flow-sensitive Can-Run-Asynchronously (CRA) analysis to detect data-transfer and kernel calls that can run asynchronously, (3) Data Flow Stream Assignment (DFSA) algorithm to schedule such asynchronous calls to different non-default streams, and (4) a transformation framework to apply sync2async and automatically optimize the input program. We have implemented StreamAlloc using LLVM/Clang. On P100, A4000, and A100 GPUs, sync2async achieves geomean speedups of 1.49x, 1.63x, and 2.02x over the baseline, respectively",
+      "citation": "Soumik Kumar Basu and Jyothi Vedurada. 2026. StreamAlloc: A Framework for Analyzing and Transforming CUDA Code to Enable Asynchronous Execution. ACM Trans. Program. Lang. Syst. Just Accepted (March 2026). https://doi.org/10.1145/3799893"
     },
     {
       "id": "gsohc",
