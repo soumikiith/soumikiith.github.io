@@ -1,7 +1,7 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
- *  Last updated: 2026-04-01T06:44:18.485Z
+ *  Last updated: 2026-04-01T06:48:46.093Z
  * ============================================================
  */
 
@@ -48,9 +48,9 @@ const CONFIG = {
   ],
   "about": {
     "bio": [
-      "I'm a PhD student at IIT Hyderabad working in the exciting world of Programming Languages. My research focuses on compile-time optimization techniques to make GPU programs significantly faster.",
-      "I'm fortunate to be advised by <strong>Dr. Jyothi Vedurada</strong>. A big shoutout to <strong>Prof. Surojit Bhattacharyya</strong> and <strong>Prof. Sumit Majumdar</strong> from MCKVIE, who ignited my passion for PL and C++.",
-      "Always up for interesting collaborations or brainstorming over chai — whether you're working on something revolutionary or just want to chat about research, drop me a message."
+      "I am a PhD student at IIT Hyderabad working in the area of Programming Languages and Compilers. My research focuses on developing compile-time optimization techniques that improve the performance of GPU programs.",
+      "I am advised by Dr. Jyothi Vedurada. I am also grateful to Prof. Surojit Bhattacharyya and Prof. Sumit Majumdar from MCKVIE, who first sparked my interest in Programming Languages and C++.",
+      "I am always happy to discuss research ideas, collaborations, or interesting problems in compilers and systems. Feel free to reach out."
     ],
     "interests": [
       "Compiler Optimizations",
