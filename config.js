@@ -1,7 +1,7 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
- *  Last updated: 2026-04-19T07:38:25.019Z
+ *  Last updated: 2026-04-19T07:39:59.957Z
  * ============================================================
  */
 
@@ -234,18 +234,6 @@ const CONFIG = {
       "role": "Teaching Assistant",
       "term": "August 2025 - December 2025",
       "institution": "IIT Hyderabad"
-    },
-    {
-      "course": "Compilers-I (CS3423)",
-      "role": "Teaching Assistant",
-      "term": "March 2026 - May 2026",
-      "institution": "IIT Hyderabad"
-    },
-    {
-      "course": "ACM Summer School on Compilers for AI/ML",
-      "role": "Teaching Assistant",
-      "term": "August 2024",
-      "institution": "IIT Hyderabad"
     }
   ],
   "services": [
@@ -255,22 +243,6 @@ const CONFIG = {
       "venue": "PPoPP",
       "venueFull": "ACM SIGPLAN Symposium on Principles and Practice of Parallel Programming",
       "year": 2023,
-      "description": null
-    },
-    {
-      "role": "Moderator",
-      "type": "Volunteer",
-      "venue": "ACM IIT Hyderabad Student Chapter",
-      "venueFull": null,
-      "year": 2023,
-      "description": null
-    },
-    {
-      "role": "Organizing Committee Member",
-      "type": "Volunteer",
-      "venue": "CSI Regional Student Chapter Convention ",
-      "venueFull": null,
-      "year": 2019,
       "description": null
     }
   ],
