@@ -1,7 +1,7 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
- *  Last updated: 2026-04-19T07:42:10.120Z
+ *  Last updated: 2026-04-19T07:43:28.186Z
  * ============================================================
  */
 
@@ -251,22 +251,6 @@ const CONFIG = {
       "venue": "ACM IITH Student Chapter",
       "venueFull": null,
       "year": 2023,
-      "description": null
-    },
-    {
-      "role": "Organizing Committee Member",
-      "type": "Volunteer",
-      "venue": "CSI Regional Chapter Convention",
-      "venueFull": null,
-      "year": 2019,
-      "description": null
-    },
-    {
-      "role": "",
-      "type": "Review",
-      "venue": "",
-      "venueFull": null,
-      "year": 2026,
       "description": null
     }
   ],
