@@ -1,7 +1,7 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
- *  Last updated: 2026-04-19T07:36:25.597Z
+ *  Last updated: 2026-04-19T07:38:25.019Z
  * ============================================================
  */
 
@@ -233,6 +233,18 @@ const CONFIG = {
       "course": "GPU Programming (CS5013)",
       "role": "Teaching Assistant",
       "term": "August 2025 - December 2025",
+      "institution": "IIT Hyderabad"
+    },
+    {
+      "course": "Compilers-I (CS3423)",
+      "role": "Teaching Assistant",
+      "term": "March 2026 - May 2026",
+      "institution": "IIT Hyderabad"
+    },
+    {
+      "course": "ACM Summer School on Compilers for AI/ML",
+      "role": "Teaching Assistant",
+      "term": "August 2024",
       "institution": "IIT Hyderabad"
     }
   ],
