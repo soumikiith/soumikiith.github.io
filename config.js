@@ -1,7 +1,7 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
- *  Last updated: 2026-04-01T07:03:48.356Z
+ *  Last updated: 2026-04-19T07:36:25.597Z
  * ============================================================
  */
 
@@ -243,6 +243,22 @@ const CONFIG = {
       "venue": "PPoPP",
       "venueFull": "ACM SIGPLAN Symposium on Principles and Practice of Parallel Programming",
       "year": 2023,
+      "description": null
+    },
+    {
+      "role": "Moderator",
+      "type": "Volunteer",
+      "venue": "ACM IIT Hyderabad Student Chapter",
+      "venueFull": null,
+      "year": 2023,
+      "description": null
+    },
+    {
+      "role": "Organizing Committee Member",
+      "type": "Volunteer",
+      "venue": "CSI Regional Student Chapter Convention ",
+      "venueFull": null,
+      "year": 2019,
       "description": null
     }
   ],
