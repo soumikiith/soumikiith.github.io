@@ -1,7 +1,7 @@
 /**
  * ============================================================
  *  PORTFOLIO CONFIG — edit this file to update the entire site
- *  Last updated: 2026-04-19T07:43:28.186Z
+ *  Last updated: 2026-05-22T05:21:08.384Z
  * ============================================================
  */
 
@@ -65,6 +65,12 @@ const CONFIG = {
     ]
   },
   "news": [
+    {
+      "date": "May 2026",
+      "text": "Travelling to PLDI 2026 to present StreamAlloc",
+      "link": null,
+      "linkText": "Read more →"
+    },
     {
       "date": "March 2026",
       "text": "Our Paper, StreamAlloc accepted to be presented in PLDI 2026",
